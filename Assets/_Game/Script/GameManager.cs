@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor; // Necessário para fechar o jogo no Editor
 
 
 
@@ -200,4 +201,5 @@ public class GameManager : MonoBehaviour
         IniciarJogo();
     }
 
+    
 }

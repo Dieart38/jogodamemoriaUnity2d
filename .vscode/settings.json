@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "jogodamemoriaUnity2d.slnx"
+    "dotnet.defaultSolution": "JogoDaMemoria.slnx"
 }
