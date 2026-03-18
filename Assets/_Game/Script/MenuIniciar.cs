@@ -24,8 +24,15 @@ public class MenuIniciar : MonoBehaviour
         // Iniciamos a sequência de despedida em vez de fechar direto
         StartCoroutine(SequenciaDeSaida());
     }
-
-   private IEnumerator SequenciaDeSaida()
+    void Update()
+    {
+        // Detecta o botão 'Voltar' do Android
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SairDoJogo();
+        }
+    }
+    private IEnumerator SequenciaDeSaida()
     {
         // 1. Mostra o agradecimento
         if (painelAgradecimento != null)

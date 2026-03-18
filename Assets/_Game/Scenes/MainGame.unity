@@ -1279,7 +1279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
-  m_Color: {r: 0.85660374, g: 0.85660374, b: 0.85660374, a: 0.5}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.5}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3453,7 +3453,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -3982237011646216980, guid: 6a9cd823b18c0a245b8765df6c8756fb, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3507,7 +3507,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 4.572693, y: -14.551514}
+  m_AnchoredPosition: {x: 4.572754, y: -14.551514}
   m_SizeDelta: {x: -832.2415, y: -184.577}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1909943402
@@ -3523,7 +3523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.0037735105, g: 0.0019579534, b: 0.0019579534, a: 0.49019608}
+  m_Color: {r: 0.11320752, g: 0.097721584, b: 0.097721584, a: 0.9882353}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4050,6 +4050,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 407126136}
     m_Modifications:
+    - target: {fileID: 5252096953345935310, guid: 6cd710af17344f042ad6beaca27f6754, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6612530892568029609, guid: 6cd710af17344f042ad6beaca27f6754, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4130,9 +4134,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6629832821731641728, guid: 6cd710af17344f042ad6beaca27f6754, type: 3}
+      propertyPath: m_text
+      value: "M\xC4LUM\xC4NGUD\n\nObrigado por exercitar sua mem\xF3ria com meu jogo!\n\nDesenvolvido
+        por:\nDiego Soares\n\nSaindo do jogo..."
+      objectReference: {fileID: 0}
     - target: {fileID: 9085320290887847450, guid: 6cd710af17344f042ad6beaca27f6754, type: 3}
       propertyPath: m_Name
       value: TelaAgradecimentos
+      objectReference: {fileID: 0}
+    - target: {fileID: 9085320290887847450, guid: 6cd710af17344f042ad6beaca27f6754, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

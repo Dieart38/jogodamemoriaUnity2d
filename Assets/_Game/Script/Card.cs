@@ -25,12 +25,14 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown() // Nome corrigido (D maiúsculo)
     {
+
         // Verifica se pode virar a carta antes de executar
         if (GameManager.Instance.CanFlip() && !isFlipped && !isMatched && !isAnimating)
         {
             FlipToFront();
             GameManager.Instance.CardFlipped(this);
         }
+        
     }
 
     public void FlipToFront()
