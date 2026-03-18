@@ -55,7 +55,7 @@ public class Card : MonoBehaviour
         while (t < duration)
         {
             t += Time.deltaTime;
-            float s = Mathf.Lerp(1f, 0f, t / duration);
+            float s = Mathf.Lerp(1f, 0f, t / duration); // Escala X vai de 1 a 0, Y e Z permanecem constantes
             transform.localScale = new Vector3(s, 1f, 1f);
             yield return null;
         }
@@ -70,12 +70,12 @@ public class Card : MonoBehaviour
         {
             t += Time.deltaTime;
             float s = Mathf.Lerp(0f, 1f, t / duration);
-            transform.localScale = new Vector3(s, 1f, 1f);
+            transform.localScale = new Vector3(s, 1f, 1f); // Mantém a escala Y e Z constantes
             yield return null;
 
         }
 
-        transform.localScale = Vector3.one;
+        transform.localScale = Vector3.one; // Garante escala final correta
         isAnimating = false;
 
     }

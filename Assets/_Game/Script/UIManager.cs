@@ -44,7 +44,7 @@ public class UIManager : MonoBehaviour
 
     public void MostrarVitoria(int tentativas)
     {
-        txtResultado.text = $"Completado em {tentativas} tentativas!";
+        txtResultado.text = $"Parabéns! Você Completou em {tentativas} tentativas! e em {60 - int.Parse(txtTempo.text.Replace("Tempo: ", ""))} segundos!";
         vitoriaPanel.SetActive(true);
     }
 

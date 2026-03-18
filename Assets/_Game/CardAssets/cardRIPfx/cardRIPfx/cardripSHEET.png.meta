@@ -1,0 +1,650 @@
+fileFormatVersion: 2
+guid: f09ee6ea268424f4fbdc8a98dbb11b3d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2606126892383816016
+    second: cardripSHEET_0
+  - first:
+      213: -5834939825966356142
+    second: cardripSHEET_1
+  - first:
+      213: 3233806201287412231
+    second: cardripSHEET_2
+  - first:
+      213: -2012599737081084019
+    second: cardripSHEET_3
+  - first:
+      213: -2073623899482433687
+    second: cardripSHEET_4
+  - first:
+      213: -195728167315860161
+    second: cardripSHEET_5
+  - first:
+      213: 4876962284760810478
+    second: cardripSHEET_6
+  - first:
+      213: 7220128667037663411
+    second: cardripSHEET_7
+  - first:
+      213: -2243193250582769994
+    second: cardripSHEET_8
+  - first:
+      213: -7512040675038309838
+    second: cardripSHEET_9
+  - first:
+      213: -3066054486351424377
+    second: cardripSHEET_10
+  - first:
+      213: 9132182226965615712
+    second: cardripSHEET_11
+  - first:
+      213: -6647538432333349286
+    second: cardripSHEET_12
+  - first:
+      213: -5019866096303895212
+    second: cardripSHEET_13
+  - first:
+      213: -6291284412543746410
+    second: cardripSHEET_14
+  - first:
+      213: -7170173723081826154
+    second: cardripSHEET_15
+  - first:
+      213: -4544216841036087460
+    second: cardripSHEET_16
+  - first:
+      213: -4041179226858683673
+    second: cardripSHEET_17
+  - first:
+      213: 8841555850509297390
+    second: cardripSHEET_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: cardripSHEET_0
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 270
+        width: 102
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b6bed3366d25dbd0800000000000000
+      internalID: -2606126892383816016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_1
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 270
+        width: 102
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 259ee73a421260fa0800000000000000
+      internalID: -5834939825966356142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_2
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 270
+        width: 102
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70a013c4b99c0ec20800000000000000
+      internalID: 3233806201287412231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_3
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 270
+        width: 102
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d87cc3cc33fc114e0800000000000000
+      internalID: -2012599737081084019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_4
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 270
+        width: 102
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 967d699cc020933e0800000000000000
+      internalID: -2073623899482433687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_5
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 270
+        width: 102
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f359992d442a84df0800000000000000
+      internalID: -195728167315860161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_6
+      rect:
+        serializedVersion: 2
+        x: 760
+        y: 270
+        width: 102
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee34526db537ea340800000000000000
+      internalID: 4876962284760810478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_7
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 52
+        width: 102
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b0056fc4cc033460800000000000000
+      internalID: 7220128667037663411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_8
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 95
+        width: 102
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6bec570af939ed0e0800000000000000
+      internalID: -2243193250582769994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_9
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 52
+        width: 102
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2325e0a7ecedfb790800000000000000
+      internalID: -7512040675038309838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_10
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 103
+        width: 102
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 784d70770bf2375d0800000000000000
+      internalID: -3066054486351424377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_11
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 52
+        width: 102
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 064db6ed9570cbe70800000000000000
+      internalID: 9132182226965615712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_12
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 103
+        width: 110
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5e730614033fb3a0800000000000000
+      internalID: -6647538432333349286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_13
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 43
+        width: 102
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45d87cdb16ad55ab0800000000000000
+      internalID: -5019866096303895212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_14
+      rect:
+        serializedVersion: 2
+        x: 542
+        y: 24
+        width: 109
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69eb061d82ed0b8a0800000000000000
+      internalID: -6291284412543746410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_15
+      rect:
+        serializedVersion: 2
+        x: 543
+        y: 116
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6902ed1fcfc6e7c90800000000000000
+      internalID: -7170173723081826154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_16
+      rect:
+        serializedVersion: 2
+        x: 551
+        y: 100
+        width: 106
+        height: 103
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5f32bffbd2bfe0c0800000000000000
+      internalID: -4544216841036087460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_17
+      rect:
+        serializedVersion: 2
+        x: 708
+        y: 95
+        width: 106
+        height: 103
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e2866d77e8dae7c0800000000000000
+      internalID: -4041179226858683673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cardripSHEET_18
+      rect:
+        serializedVersion: 2
+        x: 690
+        y: 14
+        width: 118
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee62263933483ba70800000000000000
+      internalID: 8841555850509297390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      cardripSHEET_0: -2606126892383816016
+      cardripSHEET_1: -5834939825966356142
+      cardripSHEET_10: -3066054486351424377
+      cardripSHEET_11: 9132182226965615712
+      cardripSHEET_12: -6647538432333349286
+      cardripSHEET_13: -5019866096303895212
+      cardripSHEET_14: -6291284412543746410
+      cardripSHEET_15: -7170173723081826154
+      cardripSHEET_16: -4544216841036087460
+      cardripSHEET_17: -4041179226858683673
+      cardripSHEET_18: 8841555850509297390
+      cardripSHEET_2: 3233806201287412231
+      cardripSHEET_3: -2012599737081084019
+      cardripSHEET_4: -2073623899482433687
+      cardripSHEET_5: -195728167315860161
+      cardripSHEET_6: 4876962284760810478
+      cardripSHEET_7: 7220128667037663411
+      cardripSHEET_8: -2243193250582769994
+      cardripSHEET_9: -7512040675038309838
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
