@@ -14,6 +14,7 @@ public class MenuIniciar : MonoBehaviour
     public TMP_Text txtAgradecimento; // Arraste o texto do painel aqui
     public float tempoDeEspera = 3.5f;
 
+    
     public void Jogar()
     {
         SceneManager.LoadScene("MainGame");
