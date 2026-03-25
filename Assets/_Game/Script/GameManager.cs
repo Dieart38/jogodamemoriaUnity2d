@@ -11,8 +11,8 @@ public class GameManager : MonoBehaviour
     [Header("Configuracao do Grid")]
     public int colunas = 4;
     public int linhas = 4;
-    public float espacoHorizontal = 1.2f; // Novo
-    public float espacoVertical = 1.5f;   // Novo
+    public float espacoHorizontal = 1.2f; // Novo 
+    public float espacoVertical = 1.5f;   // Novo 
 
     [Header("Prefabs e Sprites")]
     public GameObject cardPrefab;
@@ -23,11 +23,14 @@ public class GameManager : MonoBehaviour
     public int paresEncontrados = 0;
     public float tempoRestante = 60f;
     public bool jogoAtivo = false;
+    public int vitoria = 0;
 
     private Card primeiraCarta;
     private Card segundaCarta;
     private bool aguardandoComparação = false;
     private int totalPares;
+
+
 
     private void Awake()
     {
@@ -41,7 +44,27 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        totalPares = (colunas * linhas) / 2;
+       
+         if (vitoria == 0)
+        {
+            colunas = 3;
+        }
+        else if (vitoria == 1)
+        {
+            colunas = 4;
+            linhas = 4;
+        }
+        else if (vitoria == 2)
+        {
+            colunas = 5;
+            linhas = 4;
+        }
+        else if (vitoria == 3)
+        {
+            colunas = 6;
+            linhas = 4;
+        }
+         totalPares = (colunas * linhas) / 2;
         IniciarJogo();
     }
 
@@ -67,6 +90,7 @@ public class GameManager : MonoBehaviour
         jogoAtivo = true;
         UIManager.Instance.AtualizarTentativas(tentativas);
         UIManager.Instance.AtualizarPares(paresEncontrados, totalPares);
+
         CriarGrid();
 
     }
@@ -74,6 +98,7 @@ public class GameManager : MonoBehaviour
 
     private void CriarGrid()
     {
+
         List<int> ids = new List<int>();
         for (int i = 0; i < totalPares; i++)
         {
@@ -92,6 +117,7 @@ public class GameManager : MonoBehaviour
         int index = 0;
         for (int l = 0; l < linhas; l++)
         {
+           
             for (int c = 0; c < colunas; c++)
             {
                 // X usa espacoHorizontal, Y usa espacoVertical
@@ -184,9 +210,12 @@ public class GameManager : MonoBehaviour
 
     private void Vitoria()
     {
+
         SoundManager.Instance.playWin();
         jogoAtivo = false;
         UIManager.Instance.MostrarVitoria(tentativas);
+        vitoria++;
+
     }
 
     private void GameOver()
@@ -201,5 +230,5 @@ public class GameManager : MonoBehaviour
         IniciarJogo();
     }
 
-    
+
 }

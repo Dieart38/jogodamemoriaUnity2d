@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    public static SoundManager Instance {get; private set;}
+    public static SoundManager Instance { get; private set; }
 
     public AudioClip flipClip;
     public AudioClip matchClip;
@@ -12,7 +12,7 @@ public class SoundManager : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance != null){Destroy(gameObject); return;}
+        if (Instance != null) { Destroy(gameObject); return; }
         Instance = this;
         _source = GetComponent<AudioSource>();
     }

@@ -62,7 +62,6 @@ public class UIManager : MonoBehaviour
         vitoriaPanel.SetActive(true);
         inputScorePanel.SetActive(true);
         btnConfirmar.enabled = true; // Habilita o botão para confirmar o nome do recorde
-
     }
 
     public void MostrarGameOver()
