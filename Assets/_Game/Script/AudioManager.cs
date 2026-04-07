@@ -52,6 +52,7 @@ public class AudioManager : MonoBehaviour
     // Método para ser chamado quando o jogo reiniciar
     public void ReiniciarMusica()
     {
+        musicSource.Stop();
         TocarMusicaAleatoria();
     }
 }

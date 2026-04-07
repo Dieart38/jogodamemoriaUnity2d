@@ -44,8 +44,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-       
-         if (vitoria == 0)
+
+        if (vitoria == 0)
         {
             colunas = 3;
         }
@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
             colunas = 6;
             linhas = 4;
         }
-         totalPares = (colunas * linhas) / 2;
+        totalPares = (colunas * linhas) / 2;
         IniciarJogo();
     }
 
@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
         int index = 0;
         for (int l = 0; l < linhas; l++)
         {
-           
+
             for (int c = 0; c < colunas; c++)
             {
                 // X usa espacoHorizontal, Y usa espacoVertical
@@ -228,6 +228,12 @@ public class GameManager : MonoBehaviour
     {
         UIManager.Instance.EsconderPaineis();
         IniciarJogo();
+    }
+
+    public void ProximoNivel()
+    {
+        UIManager.Instance.EsconderPaineis();
+        Start();
     }
 
 

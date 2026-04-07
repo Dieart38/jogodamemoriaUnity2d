@@ -152,4 +152,14 @@ public class UIManager : MonoBehaviour
             Application.Quit();
 #endif
     }
+
+    public void ProximoNivel()
+    {
+        //parar musica atual
+        if (AudioManager.Instance != null)        {
+            AudioManager.Instance.ReiniciarMusica();
+        }
+        //chamar proximo nivel
+        GameManager.Instance.ProximoNivel();
+    }
 }

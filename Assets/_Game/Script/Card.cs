@@ -1,12 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
-using System;
 public class Card : MonoBehaviour
 {
     [Header("Configuracao da Carta")]
-    public int cardID;  // ID que define o par
-    public Sprite fronSprite;  // Imagem da face da carta
+    public int cardID;
+    public Sprite fronSprite;
 
     [Header("Referencias Internas")]
     public SpriteRenderer frontRenderer;
@@ -16,24 +15,54 @@ public class Card : MonoBehaviour
     private bool isMatched = false;
     private bool isAnimating = false;
 
-
     private void Start()
     {
         frontRenderer.sprite = fronSprite;
         ShowBack();
     }
 
-    private void OnMouseDown() // Nome corrigido (D maiúsculo)
-    {
+    // ─── INPUT UNIFICADO ──────────────────────────────────────────────────────
 
-        // Verifica se pode virar a carta antes de executar
+    private void Update()
+    {
+        // PC / Editor: mouse
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector2 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
+
+            if (hit.collider != null && hit.collider.gameObject == gameObject)
+                HandleCardPress();
+        }
+
+        // Android: toque
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                Vector2 worldPos = Camera.main.ScreenToWorldPoint(touch.position);
+                RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
+
+                if (hit.collider != null && hit.collider.gameObject == gameObject)
+                    HandleCardPress();
+            }
+        }
+    }
+
+    private void HandleCardPress()
+    {
+        Debug.Log($"Carta clicada: {cardID}"); // remove depois
+
         if (GameManager.Instance.CanFlip() && !isFlipped && !isMatched && !isAnimating)
         {
             FlipToFront();
             GameManager.Instance.CardFlipped(this);
         }
-        
     }
+
+    // ─── FLIP ─────────────────────────────────────────────────────────────────
 
     public void FlipToFront()
     {
@@ -50,37 +79,34 @@ public class Card : MonoBehaviour
     private IEnumerator FlipAnimation(bool showFront)
     {
         isAnimating = true;
-        float t = 0f;
         float duration = 0.15f;
+        float t = 0f;
 
-        // Primeira metade: reduz escala X para 0
         while (t < duration)
         {
             t += Time.deltaTime;
-            float s = Mathf.Lerp(1f, 0f, t / duration); // Escala X vai de 1 a 0, Y e Z permanecem constantes
+            float s = Mathf.Lerp(1f, 0f, t / duration);
             transform.localScale = new Vector3(s, 1f, 1f);
             yield return null;
         }
 
-        // Troca Visual no ponto de menor escala
         if (showFront) ShowFront();
         else ShowBack();
 
-        // Segunda metade: aumenta a escala X de volta a 1
         t = 0f;
         while (t < duration)
         {
             t += Time.deltaTime;
             float s = Mathf.Lerp(0f, 1f, t / duration);
-            transform.localScale = new Vector3(s, 1f, 1f); // Mantém a escala Y e Z constantes
+            transform.localScale = new Vector3(s, 1f, 1f);
             yield return null;
-
         }
 
-        transform.localScale = Vector3.one; // Garante escala final correta
+        transform.localScale = Vector3.one;
         isAnimating = false;
-
     }
+
+    // ─── VISUAIS ──────────────────────────────────────────────────────────────
 
     private void ShowFront()
     {
@@ -97,7 +123,6 @@ public class Card : MonoBehaviour
     public void SetMatched()
     {
         isMatched = true;
-        // Efeito visual de par encontrado
         StartCoroutine(MatchEffect());
     }
 
