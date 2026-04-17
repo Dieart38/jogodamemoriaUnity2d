@@ -55,4 +55,12 @@ public class AudioManager : MonoBehaviour
         musicSource.Stop();
         TocarMusicaAleatoria();
     }
+
+    public void DefinirVelocidadeMusica(float velocidade)
+{
+    if (musicSource != null)
+    {
+        musicSource.pitch = velocidade;
+    }
+}
 }

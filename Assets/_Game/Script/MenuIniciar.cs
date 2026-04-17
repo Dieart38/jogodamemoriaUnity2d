@@ -14,12 +14,24 @@ public class MenuIniciar : MonoBehaviour
     public TMP_Text txtAgradecimento; // Arraste o texto do painel aqui
     public float tempoDeEspera = 3.5f;
 
-    
-    public void Jogar()
+    void Awake()
     {
-        SceneManager.LoadScene("MainGame");
+        // 1. ACESSO ESTÁTICO: Referenciamos a classe GameManager para zerar a vitória
+        GameManager.vitoria = 0;
+
+        if (painelAgradecimento != null)
+        {
+            painelAgradecimento.SetActive(false);
+        }
     }
 
+    public void Jogar()
+    {
+        // Opcional: Você também pode zerar aqui para garantir que 
+        // toda vez que o botão "Jogar" for clicado, comece do nível 0
+        GameManager.vitoria = 0;
+        SceneManager.LoadScene("MainGame");
+    }
     public void SairDoJogo()
     {
         // Iniciamos a sequência de despedida em vez de fechar direto

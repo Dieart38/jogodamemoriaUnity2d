@@ -9,8 +9,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     [Header("Configuracao do Grid")]
-    public int colunas = 4;
-    public int linhas = 4;
+    public int colunas;
+    public int linhas;
     public float espacoHorizontal = 1.2f; // Novo 
     public float espacoVertical = 1.5f;   // Novo 
 
@@ -23,14 +23,16 @@ public class GameManager : MonoBehaviour
     public int paresEncontrados = 0;
     public float tempoRestante = 60f;
     public bool jogoAtivo = false;
-    public int vitoria = 0;
+    public static int vitoria = 0;
 
+    [Header("Efeitos Visuais")]
+    public GameObject matchEffectPrefab; // Arraste seu prefab de explosão aqui no Inspector
     private Card primeiraCarta;
     private Card segundaCarta;
     private bool aguardandoComparação = false;
     private int totalPares;
 
-
+    private bool musicaAcelerada = false; // Flag para controlar a aceleração da música
 
     private void Awake()
     {
@@ -44,27 +46,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-
-        if (vitoria == 0)
-        {
-            colunas = 3;
-        }
-        else if (vitoria == 1)
-        {
-            colunas = 4;
-            linhas = 4;
-        }
-        else if (vitoria == 2)
-        {
-            colunas = 5;
-            linhas = 4;
-        }
-        else if (vitoria == 3)
-        {
-            colunas = 6;
-            linhas = 4;
-        }
-        totalPares = (colunas * linhas) / 2;
+        ConfigurarDificuldade();
         IniciarJogo();
     }
 
@@ -72,8 +54,16 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if (!jogoAtivo) return;
+
         tempoRestante -= Time.deltaTime;
         UIManager.Instance.AtualizarTempo(tempoRestante);
+
+        if (tempoRestante <= 10f && !musicaAcelerada)
+        {
+            musicaAcelerada = true;
+            AudioManager.Instance.DefinirVelocidadeMusica(1.25f); // 25% mais rápido
+        }
+
         if (tempoRestante <= 0f)
         {
             tempoRestante = 0f;
@@ -81,12 +71,47 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void ConfigurarDificuldade()
+    {
+        // Lógica do Grid
+        if (vitoria <= 3)
+        {
+            switch (vitoria)
+            {
+                case 0: colunas = 3; linhas = 4; break;
+                case 1: colunas = 4; linhas = 4; break;
+                case 2: colunas = 5; linhas = 4; break;
+                case 3: colunas = 6; linhas = 4; break;
+            }
+        }
+        else
+        {
+            colunas = Random.Range(3, 7);
+            linhas = 4;
+        }
+
+        // Lógica do Tempo (O cálculo que você queria)
+        if (vitoria >= 3)
+        {
+            float tempoCalculado = 50f - ((vitoria - 3) * 5f);
+            tempoRestante = Mathf.Max(tempoCalculado, 25f);
+        }
+        else
+        {
+            tempoRestante = 60f;
+        }
+
+        totalPares = (colunas * linhas) / 2;
+    }
+
     public void IniciarJogo()
     {
         LimparGrid();
+        musicaAcelerada = false;
+        AudioManager.Instance.DefinirVelocidadeMusica(1.0f); // Volta ao normal
         tentativas = 0;
         paresEncontrados = 0;
-        tempoRestante = 60f;
+        //tempoRestante = 60f;
         jogoAtivo = true;
         UIManager.Instance.AtualizarTentativas(tentativas);
         UIManager.Instance.AtualizarPares(paresEncontrados, totalPares);
@@ -132,7 +157,7 @@ public class GameManager : MonoBehaviour
                 if (index < ids.Count && ids[index] < cardSprite.Length)
                 {
                     card.cardID = ids[index];
-                    card.fronSprite = cardSprite[ids[index]];
+                    card.frontSprite = cardSprite[ids[index]];
                 }
 
                 obj.name = $"Card_{ids[index]}_{index}";
@@ -179,6 +204,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+
+
     private IEnumerator CompararCartas()
     {
         yield return new WaitForSeconds(0.8f);
@@ -186,8 +214,15 @@ public class GameManager : MonoBehaviour
         {
             // Par encontrado
             SoundManager.Instance.playMatch();
-            primeiraCarta.SetMatched();
-            segundaCarta.SetMatched();
+
+            // INSTANCIAR EXPLOSÃO EM CADA CARTA
+            Instantiate(matchEffectPrefab, primeiraCarta.transform.position, Quaternion.identity);
+            Instantiate(matchEffectPrefab, segundaCarta.transform.position, Quaternion.identity);
+
+            // Chamar o método para a carta sumir
+            primeiraCarta.RecolherCarta();
+            segundaCarta.RecolherCarta();
+
             paresEncontrados++;
             UIManager.Instance.AtualizarPares(paresEncontrados, totalPares);
 
@@ -198,7 +233,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            //Sem par - vira de  volta
             primeiraCarta.FlipToBack();
             segundaCarta.FlipToBack();
         }
@@ -226,14 +260,22 @@ public class GameManager : MonoBehaviour
 
     public void Reiniciar()
     {
+        // 1. Zera o contador de vitórias para voltar ao nível inicial
+        vitoria = 0;
+
         UIManager.Instance.EsconderPaineis();
+
+        // 2. Recalcula a dificuldade com vitoria valendo 0
+        ConfigurarDificuldade();
+
         IniciarJogo();
     }
 
     public void ProximoNivel()
     {
         UIManager.Instance.EsconderPaineis();
-        Start();
+        ConfigurarDificuldade();
+        IniciarJogo();
     }
 
 

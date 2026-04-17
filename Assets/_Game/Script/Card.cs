@@ -5,7 +5,7 @@ public class Card : MonoBehaviour
 {
     [Header("Configuracao da Carta")]
     public int cardID;
-    public Sprite fronSprite;
+    public Sprite frontSprite;
 
     [Header("Referencias Internas")]
     public SpriteRenderer frontRenderer;
@@ -17,7 +17,7 @@ public class Card : MonoBehaviour
 
     private void Start()
     {
-        frontRenderer.sprite = fronSprite;
+        frontRenderer.sprite = frontSprite;
         ShowBack();
     }
 
@@ -133,4 +133,10 @@ public class Card : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         frontRenderer.color = original;
     }
+    public void RecolherCarta()
+{
+    isMatched = true;
+    // Desativa o objeto para ele sumir da tela e parar de aceitar cliques
+    gameObject.SetActive(false); 
+}
 }
