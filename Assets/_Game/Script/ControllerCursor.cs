@@ -1,42 +1,59 @@
 using UnityEngine;
-using UnityEngine.EventSystems; // Necessário para interagir com a UI
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
 public class ControllerCursor : MonoBehaviour
 {
     public float velocidade = 500f;
-    public RectTransform cursorVisual; // Arraste a imagem do cursor aqui (UI)
-    public string botaoSelecao = "JoystickButton0"; // Botão A do Xbox
-
+    public RectTransform cursorVisual; 
+    
     private Vector2 posicaoVirtual;
+    private Vector2 ultimaPosicaoMouse; // Guarda a posição do mouse no frame anterior
+
+    void Awake()
+    {
+        if (cursorVisual == null)
+        {
+            Debug.LogError("ControllerCursor: O cursorVisual não foi atribuído no Inspector.");
+        }
+        
+    }
 
     void Start()
     {
-        // Começa o cursor no centro da tela
         posicaoVirtual = new Vector2(Screen.width / 2, Screen.height / 2);
-        // Esconde o cursor real do mouse se quiser
-        Cursor.visible = false;
+        ultimaPosicaoMouse = Input.mousePosition;
+        Cursor.visible = false; // Esconde o cursor real do sistema
     }
 
     void Update()
     {
-        // 1. Captura o movimento do Analógico Esquerdo ou Setas
+        // 1. DETECTAR MOVIMENTO DO MOUSE
+        Vector2 mouseAtual = Input.mousePosition;
+        
+        // Se a posição atual do mouse for diferente da última, o usuário mexeu o mouse
+        if (mouseAtual != ultimaPosicaoMouse)
+        {
+            posicaoVirtual = mouseAtual;
+            ultimaPosicaoMouse = mouseAtual;
+        }
+
+        // 2. CAPTURAR MOVIMENTO DO CONTROLE (Analógico/Setas)
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        // 2. Atualiza a posição baseada na velocidade
+        // O controle move o cursor a partir da posição atual (seja ela vinda do mouse ou do stick)
         posicaoVirtual.x += horizontal * velocidade * Time.deltaTime;
         posicaoVirtual.y += vertical * velocidade * Time.deltaTime;
 
-        // Limita o cursor para não sair da tela
+        // 3. LIMITAR E ATUALIZAR VISUAL
         posicaoVirtual.x = Mathf.Clamp(posicaoVirtual.x, 0, Screen.width);
         posicaoVirtual.y = Mathf.Clamp(posicaoVirtual.y, 0, Screen.height);
 
-        // 3. Move o visual do cursor na UI
         cursorVisual.position = posicaoVirtual;
 
-        // 4. SIMULA O CLIQUE (O "Pulo do Gato")
-        if (Input.GetKeyDown(KeyCode.JoystickButton0) || Input.GetKeyDown(KeyCode.Return))
+        // 4. CLIQUE (Aceita Botão A do Xbox, Enter ou Clique Esquerdo do Mouse)
+        if (Input.GetKeyDown(KeyCode.JoystickButton0) || Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
         {
             SimularClique();
         }
@@ -54,20 +71,15 @@ public class ControllerCursor : MonoBehaviour
         {
             foreach (var result in uiResults)
             {
-                // O PULO DO GATO: 
-                // Procuramos na hierarquia (do objeto atingido para cima) quem tem um manipulador de clique.
                 GameObject targetComEvento = ExecuteEvents.GetEventHandler<IPointerClickHandler>(result.gameObject);
-
                 if (targetComEvento != null)
                 {
-                    // Disparamos o evento no objeto certo (o Botão, não o Texto)
                     ExecuteEvents.Execute(targetComEvento, pointerData, ExecuteEvents.pointerClickHandler);
-                    return;
+                    return; 
                 }
             }
         }
 
-        // Se não bateu na UI, checa as cartas
         Vector2 worldPos = Camera.main.ScreenToWorldPoint(posicaoVirtual);
         RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
 

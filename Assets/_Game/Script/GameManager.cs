@@ -22,8 +22,12 @@ public class GameManager : MonoBehaviour
     public int tentativas = 0;
     public int paresEncontrados = 0;
     public float tempoRestante = 60f;
+    public float tempoFaseInicial;
     public bool jogoAtivo = false;
     public static int vitoria = 0;
+    [Header("Acumuladores de Sessão")]
+    public static int tempoTotalSessao = 0;
+    public static int tentativasTotaisSessao = 0;
 
     [Header("Efeitos Visuais")]
     public GameObject matchEffectPrefab; // Arraste seu prefab de explosão aqui no Inspector
@@ -73,21 +77,21 @@ public class GameManager : MonoBehaviour
 
     private void ConfigurarDificuldade()
     {
-        // Lógica do Grid
+        linhas = 4; // Defina o padrão aqui fora para garantir que nunca seja 0 ou lixo
+
         if (vitoria <= 3)
         {
             switch (vitoria)
             {
-                case 0: colunas = 3; linhas = 4; break;
-                case 1: colunas = 4; linhas = 4; break;
-                case 2: colunas = 5; linhas = 4; break;
-                case 3: colunas = 6; linhas = 4; break;
+                case 0: colunas = 3; break; // 3x4 = 12 cartas
+                case 1: colunas = 4; break; // 4x4 = 16 cartas
+                case 2: colunas = 5; break; // 5x4 = 20 cartas
+                case 3: colunas = 6; break; // 6x4 = 24 cartas
             }
         }
         else
         {
             colunas = Random.Range(3, 7);
-            linhas = 4;
         }
 
         // Lógica do Tempo (O cálculo que você queria)
@@ -100,7 +104,7 @@ public class GameManager : MonoBehaviour
         {
             tempoRestante = 60f;
         }
-
+        tempoFaseInicial = tempoRestante; // Guarda o tempo inicial para cálculo posterior
         totalPares = (colunas * linhas) / 2;
     }
 
@@ -244,11 +248,21 @@ public class GameManager : MonoBehaviour
 
     private void Vitoria()
     {
+        // 1. PRIMEIRO: Calcula e acumula
+        tentativasTotaisSessao += tentativas; // tentativas da fase atual
 
-        SoundManager.Instance.playWin();
-        jogoAtivo = false;
-        UIManager.Instance.MostrarVitoria(tentativas);
+        float tempoGastoNestaFase = tempoFaseInicial - tempoRestante;
+        tempoTotalSessao += Mathf.RoundToInt(tempoGastoNestaFase);
+
+        // 2. DEPOIS: Aumenta o nível e para o jogo
         vitoria++;
+        jogoAtivo = false;
+
+        // 3. POR FIM: Mostra a UI
+        SoundManager.Instance.playWin();
+        UIManager.Instance.MostrarVitoria(tentativas);
+
+
 
     }
 
@@ -260,8 +274,9 @@ public class GameManager : MonoBehaviour
 
     public void Reiniciar()
     {
-        // 1. Zera o contador de vitórias para voltar ao nível inicial
         vitoria = 0;
+        tempoTotalSessao = 0;       // ZERA AQUI
+        tentativasTotaisSessao = 0; // ZERA AQUI
 
         UIManager.Instance.EsconderPaineis();
 

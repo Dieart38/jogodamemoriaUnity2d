@@ -83,7 +83,7 @@ public class UIManager : MonoBehaviour
             AudioManager.Instance.ReiniciarMusica();
         }
 
-        GameManager.Instance.Reiniciar();
+        
         GameManager.Instance.Reiniciar();
     }
 
@@ -100,15 +100,18 @@ public class UIManager : MonoBehaviour
     public void ConfirmarRecorde()
     {
         string nome = inputNome.text.ToUpper();
-        if (nome.Length < 1) nome = "AAA";
+        if (string.IsNullOrEmpty(nome)) nome = "AAA";
 
-        int tempoAtual = 60 - int.Parse(txtTempo.text.Replace("Tempo: ", ""));
-        int tentativasAtuais = int.Parse(txtTentativas.text.Replace("Tentativas: ", ""));
+        // Use as variáveis estáticas que guardam o progresso de TODAS as fases
+        int tempoFinal = GameManager.tempoTotalSessao;
+        int tentFinal = GameManager.tentativasTotaisSessao;
+        int fasesFinal = GameManager.vitoria;
 
-        ScoreManager.SalvarRecorde(nome, tempoAtual, tentativasAtuais);
+        ScoreManager.SalvarRecorde(nome, tempoFinal, tentFinal, fasesFinal);
+
         inputScorePanel.SetActive(false);
-        btnConfirmar.enabled = false; // Desabilita o botão após confirmar
-        MostrarPainelRecordes(); // Abre a lista atualizada
+        btnConfirmar.enabled = false;
+        MostrarPainelRecordes();
     }
 
     public void MostrarPainelRecordes()
@@ -117,13 +120,14 @@ public class UIManager : MonoBehaviour
         recordesPanel.SetActive(true);
         var lista = ScoreManager.CarregarRecordes();
 
-        txtListaRecordes.text = "TOP 6 RECORDES\n\n";
+        txtListaRecordes.text = "<color=#FFD700>RANKING MÄLUMÄNGUD</color>\n\n";
+
         foreach (var s in lista)
         {
-            txtListaRecordes.text += $"{s.nome} - {s.tempo} segundos - {s.tentativas} tentativas\n";
+            // Usando interpolação de string para um visual mais limpo
+            txtListaRecordes.text += $"{s.nome} | {s.fasesJogadas} Fases | {s.tempo}s | {s.tentativas} Tent.\n";
         }
     }
-
     public void FecharPainelRecordes()
 
     {
@@ -156,7 +160,8 @@ public class UIManager : MonoBehaviour
     public void ProximoNivel()
     {
         //parar musica atual
-        if (AudioManager.Instance != null)        {
+        if (AudioManager.Instance != null)
+        {
             AudioManager.Instance.ReiniciarMusica();
         }
         //chamar proximo nivel

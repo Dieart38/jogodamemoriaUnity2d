@@ -3,32 +3,45 @@ using System.Collections.Generic;
 using System;
 
 [Serializable]
-public class PlayerScore {
+public class PlayerScore
+{
     public string nome;
     public int tempo;
     public int tentativas;
+    public int fasesJogadas; // Novo campo
 }
-
-public static class ScoreManager {
+public static class ScoreManager
+{
     private const int MaxRecordes = 6;
 
-    public static void SalvarRecorde(string nome, int tempo, int tentativas) {
+    public static void SalvarRecorde(string nome, int tempo, int tentativas, int fases)
+    {
         List<PlayerScore> lista = CarregarRecordes();
-        lista.Add(new PlayerScore { nome = nome, tempo = tempo, tentativas = tentativas });
+        lista.Add(new PlayerScore
+        {
+            nome = nome,
+            tempo = tempo,
+            tentativas = tentativas,
+            fasesJogadas = fases
+        });
 
-        // Ordena por menor tempo (ou tentativas se preferir)
-        lista.Sort((a, b) => a.tempo.CompareTo(b.tempo));
+        lista.Sort((a, b) =>
+        {
+            int res = b.fasesJogadas.CompareTo(a.fasesJogadas);
+            if (res == 0) res = a.tempo.CompareTo(b.tempo);
+            return res;
+        });
 
-        // Mantém apenas os 6 melhores
         if (lista.Count > MaxRecordes) lista.RemoveAt(MaxRecordes);
 
-        // Converte para JSON e salva no PlayerPrefs
+        // --- ADICIONE ESTAS LINHAS ABAIXO PARA GRAVAR DE VERDADE ---
         string json = JsonUtility.ToJson(new SerializationWrapper<PlayerScore> { items = lista });
         PlayerPrefs.SetString("HighScores", json);
-        PlayerPrefs.Save();
+        PlayerPrefs.Save(); // Força a gravação no arquivo
     }
 
-    public static List<PlayerScore> CarregarRecordes() {
+    public static List<PlayerScore> CarregarRecordes()
+    {
         if (!PlayerPrefs.HasKey("HighScores")) return new List<PlayerScore>();
         string json = PlayerPrefs.GetString("HighScores");
         return JsonUtility.FromJson<SerializationWrapper<PlayerScore>>(json).items;
