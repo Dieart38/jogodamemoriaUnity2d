@@ -10,16 +10,16 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance { get; private set; }
 
     [Header("Textos do HUD")]
-    public TMP_Text txtTentativas;
-    public TMP_Text txtPares;
-    public TMP_Text txtTempo;
+    public Text txtTentativas;
+    public Text txtPares;
+    public Text txtTempo;
 
     [Header("Paineis")]
     public GameObject vitoriaPanel;
     public GameObject gameOverPanel;
 
     [Header("Textos do Paineis")]
-    public TMP_Text txtResultado; // dentro do vitoriaPanel
+    public Text txtVitoria; // dentro do vitoriaPanel
 
     [Header("Painel de Recordes")]
     public GameObject recordesPanel;
@@ -58,15 +58,18 @@ public class UIManager : MonoBehaviour
 
     public void MostrarVitoria(int tentativas)
     {
-        txtResultado.text = $"Parabéns! \n Você Completou em {tentativas} tentativas! e em {60 - int.Parse(txtTempo.text.Replace("Tempo: ", ""))} segundos!";
+        txtVitoria.text = $"Parabéns! \n Você Completou em {tentativas} tentativas!";
         vitoriaPanel.SetActive(true);
-        inputScorePanel.SetActive(true);
-        btnConfirmar.enabled = true; // Habilita o botão para confirmar o nome do recorde
+        //inputScorePanel.SetActive(true);
+        //btnConfirmar.enabled = true; // Habilita o botão para confirmar o nome do recorde
     }
 
     public void MostrarGameOver()
     {
         gameOverPanel.SetActive(true);
+        inputScorePanel.SetActive(true);
+        btnConfirmar.enabled = true; // Habilita o botão para confirmar o nome do recorde
+        
     }
 
     public void EsconderPaineis()

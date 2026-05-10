@@ -2,22 +2,41 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    public static SoundManager Instance { get; private set; }
+    public static SoundManager Instance;
 
-    public AudioClip flipClip;
-    public AudioClip matchClip;
-    public AudioClip winClip;
+    private AudioSource audioSource;
 
-    private AudioSource _source;
+    [Header("Configurações de Áudio")]
+    // Mudamos de AudioClip para uma Array (lista)
+    public AudioClip[] sonsDeAcerto; 
+    public AudioClip somViraCarta;
+    public AudioClip somVitoria;
 
-    private void Awake()
+    void Awake()
     {
-        if (Instance != null) { Destroy(gameObject); return; }
-        Instance = this;
-        _source = GetComponent<AudioSource>();
+        if (Instance == null) Instance = this;
+        audioSource = GetComponent<AudioSource>();
     }
 
-    public void PlayFlip() => _source.PlayOneShot(flipClip);
-    public void playMatch() => _source.PlayOneShot(matchClip);
-    public void playWin() => _source.PlayOneShot(winClip);
+    public void playMatch()
+    {
+        if (sonsDeAcerto.Length > 0)
+        {
+            // Escolhe um número aleatório entre 0 e o tamanho da lista
+            int indiceAleatorio = Random.Range(0, sonsDeAcerto.Length);
+            
+            // Toca o som escolhido sem interromper outros sons
+            audioSource.PlayOneShot(sonsDeAcerto[indiceAleatorio]);
+        }
+    }
+
+    public void PlayFlip()
+    {
+        audioSource.PlayOneShot(somViraCarta);
+    }
+
+    public void playWin()
+    {
+        audioSource.PlayOneShot(somVitoria);
+    }
 }

@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        vitoria = 3; // Garante que a vitória comece do zero
+        vitoria = 0; // Garante que a vitória comece do zero
         ConfigurarDificuldade();
         IniciarJogo();
     }
