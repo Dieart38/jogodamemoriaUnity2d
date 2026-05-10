@@ -45,11 +45,14 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject); return;
         }
         Instance = this;
-
+        Cursor.visible = false;
+        
+        
     }
 
     void Start()
     {
+        vitoria = 3; // Garante que a vitória comece do zero
         ConfigurarDificuldade();
         IniciarJogo();
     }
@@ -78,7 +81,7 @@ public class GameManager : MonoBehaviour
     private void ConfigurarDificuldade()
     {
         linhas = 4; // Defina o padrão aqui fora para garantir que nunca seja 0 ou lixo
-
+        tempoRestante = 60f; // Define o tempo padrão aqui fora para garantir que nunca seja 0 
         if (vitoria <= 3)
         {
             switch (vitoria)
@@ -86,7 +89,7 @@ public class GameManager : MonoBehaviour
                 case 0: colunas = 3; break; // 3x4 = 12 cartas
                 case 1: colunas = 4; break; // 4x4 = 16 cartas
                 case 2: colunas = 5; break; // 5x4 = 20 cartas
-                case 3: colunas = 6; break; // 6x4 = 24 cartas
+                case 3: colunas = 6; tempoRestante = 80f; break; // 6x4 = 24 cartas
             }
         }
         else
@@ -95,15 +98,12 @@ public class GameManager : MonoBehaviour
         }
 
         // Lógica do Tempo (O cálculo que você queria)
-        if (vitoria >= 3)
+        if (vitoria > 3 && colunas == 5)
         {
             float tempoCalculado = 50f - ((vitoria - 3) * 5f);
             tempoRestante = Mathf.Max(tempoCalculado, 25f);
         }
-        else
-        {
-            tempoRestante = 60f;
-        }
+
         tempoFaseInicial = tempoRestante; // Guarda o tempo inicial para cálculo posterior
         totalPares = (colunas * linhas) / 2;
     }
@@ -289,6 +289,12 @@ public class GameManager : MonoBehaviour
     public void ProximoNivel()
     {
         UIManager.Instance.EsconderPaineis();
+        VideoTransitionManager.Instance.IniciarTransicao();
+        //ConfigurarDificuldade();
+        //IniciarJogo();
+    }
+    public void ProximoNivelAposVideo()
+    {
         ConfigurarDificuldade();
         IniciarJogo();
     }
