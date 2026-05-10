@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
     [Header("Paineis")]
     public GameObject vitoriaPanel;
     public GameObject gameOverPanel;
+    public bool gameoverCont = false;
 
     [Header("Textos do Paineis")]
     public Text txtVitoria; // dentro do vitoriaPanel
@@ -34,6 +35,7 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
+        gameoverCont = false; // Garante que o gameoverCont comece como false
         if (Instance != null) { Destroy(gameObject); return; }
         Instance = this;
     }
@@ -66,6 +68,7 @@ public class UIManager : MonoBehaviour
 
     public void MostrarGameOver()
     {
+        gameoverCont = true;
         gameOverPanel.SetActive(true);
         inputScorePanel.SetActive(true);
         btnConfirmar.enabled = true; // Habilita o botão para confirmar o nome do recorde
@@ -80,6 +83,7 @@ public class UIManager : MonoBehaviour
     // Chamado pelo botao de reiniciar (configurado no inspector)
     public void BotaReiniciar()
     {
+        gameoverCont = false;
         // Chama a música aleatória antes de reiniciar a lógica do jogo
         if (AudioManager.Instance != null)
         {
@@ -135,7 +139,8 @@ public class UIManager : MonoBehaviour
 
     {
         recordesPanel.SetActive(false);
-        vitoriaPanel.SetActive(true);
+        if(gameoverCont==true) gameOverPanel.SetActive(true);
+        else if(vitoriaPanel==true) vitoriaPanel.SetActive(true);
     }
     private IEnumerator SequenciaDeSaida()
     {

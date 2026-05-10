@@ -5109,7 +5109,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &120413614
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17349,7 +17349,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1321343488
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17940,6 +17940,7 @@ MonoBehaviour:
   txtTempo: {fileID: 1675399846}
   vitoriaPanel: {fileID: 1321343487}
   gameOverPanel: {fileID: 2072610571}
+  gameoverCont: 0
   txtVitoria: {fileID: 1958719744}
   recordesPanel: {fileID: 1909943400}
   txtListaRecordes: {fileID: 1941369588}
