@@ -52,7 +52,17 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 384334cf54b87914a8d8954906a49882, type: 3}
   - {fileID: 8300000, guid: ea522c98703d97045a6d49df9fc80aea, type: 3}
   - {fileID: 8300000, guid: 6c3b3523b60b6114b97088f1cf077c88, type: 3}
-  - {fileID: 8300000, guid: 231c583a303100a4796514455456d2d4, type: 3}
+  - {fileID: 8300000, guid: dc11e192193f7d2429a8e3dfa7ff5347, type: 3}
+  - {fileID: 8300000, guid: 4278ce725e75afb44bfa4321bb1f07cc, type: 3}
+  - {fileID: 8300000, guid: 1a4b232ce25652b4cb6b1a53b7427d3b, type: 3}
+  - {fileID: 8300000, guid: de4d124faecd0e74a901739746382a64, type: 3}
+  - {fileID: 8300000, guid: 445be5bce7874f04d9ba80b51af081f5, type: 3}
+  - {fileID: 8300000, guid: 58980db73c8da7140a9e3ec4ce228788, type: 3}
+  - {fileID: 8300000, guid: 58942e480dc08e241a2b8b1b24cae632, type: 3}
+  - {fileID: 8300000, guid: 091719f146a0a164682afa738737383e, type: 3}
+  - {fileID: 8300000, guid: 384334cf54b87914a8d8954906a49882, type: 3}
+  - {fileID: 8300000, guid: 602bd03c581709449ba8b617c8631954, type: 3}
+  - {fileID: 8300000, guid: ea522c98703d97045a6d49df9fc80aea, type: 3}
   tocarAoIniciar: 1
 --- !u!82 &2413751583572600294
 AudioSource:

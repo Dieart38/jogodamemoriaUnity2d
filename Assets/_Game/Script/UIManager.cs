@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Painel de Recordes")]
     public GameObject recordesPanel;
-    public TMP_Text txtListaRecordes; // Um único texto grande ou vários
+    public Text txtListaRecordes; // Um único texto grande ou vários
     public InputField inputNome; // InputField configurado para 3 caracteres
     public GameObject inputScorePanel; // Painel que aparece na vitória para digitar o nome
     public Button btnConfirmar; // Botão para confirmar o nome e salvar o recorde
@@ -123,7 +123,7 @@ public class UIManager : MonoBehaviour
         recordesPanel.SetActive(true);
         var lista = ScoreManager.CarregarRecordes();
 
-        txtListaRecordes.text = "<color=#FFD700>RANKING MÄLUMÄNGUD</color>\n\n";
+        txtListaRecordes.text = "<color=#FFD700>RANKING Weow-Moria</color>\n\n";
 
         foreach (var s in lista)
         {
