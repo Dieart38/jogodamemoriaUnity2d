@@ -74,7 +74,7 @@ public class ControllerCursor : MonoBehaviour
                 GameObject targetComEvento = ExecuteEvents.GetEventHandler<IPointerClickHandler>(result.gameObject);
                 if (targetComEvento != null)
                 {
-                    ExecuteEvents.Execute(targetComEvento, pointerData, ExecuteEvents.pointerClickHandler);
+                    ExecuteEvents.Execute(targetComEvento, pointerData, ExecuteEvents.pointerClickHandler);// Simula o clique no objeto UI 
                     return; 
                 }
             }

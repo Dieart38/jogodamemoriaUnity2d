@@ -14,6 +14,8 @@ public class UIManager : MonoBehaviour
     public Text txtPares;
     public Text txtTempo;
 
+    public Text txtVitorias;
+
     [Header("Paineis")]
     public GameObject vitoriaPanel;
     public GameObject gameOverPanel;
@@ -58,6 +60,11 @@ public class UIManager : MonoBehaviour
         txtTempo.color = s <= 10 ? Color.red : Color.yellow;
     }
 
+     public void AtualizarVitorias(int valor)
+    {
+        txtVitorias.text = $"Vitórias: {valor}";
+    }
+
     public void MostrarVitoria(int tentativas)
     {
         txtVitoria.text = $"Parabéns! \n Você Completou em {tentativas} tentativas!";
@@ -72,7 +79,7 @@ public class UIManager : MonoBehaviour
         gameOverPanel.SetActive(true);
         inputScorePanel.SetActive(true);
         btnConfirmar.enabled = true; // Habilita o botão para confirmar o nome do recorde
-        
+        GameManager.Instance.musicaGameOver.Play();
     }
 
     public void EsconderPaineis()
@@ -139,7 +146,11 @@ public class UIManager : MonoBehaviour
 
     {
         recordesPanel.SetActive(false);
-        if(gameoverCont==true) gameOverPanel.SetActive(true);
+        if (gameoverCont == true)
+        {
+            gameOverPanel.SetActive(true);
+            GameManager.Instance.musicaGameOver.Play();
+        } 
         else if(vitoriaPanel==true) vitoriaPanel.SetActive(true);
     }
     private IEnumerator SequenciaDeSaida()

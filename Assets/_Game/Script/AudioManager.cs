@@ -7,6 +7,7 @@ public class AudioManager : MonoBehaviour
 
     [Header("Configurações de Áudio")]
     public AudioSource musicSource;
+    public AudioClip musicaDoMenu; // <- Nova variável para a música fixa do menu
     public List<AudioClip> listaDeMusicas;
 
     [Header("Opções")]
@@ -14,7 +15,6 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        // Padrão Singleton: Garante que só exista um AudioManager e ele não morra ao trocar de cena
         if (Instance == null)
         {
             Instance = this;
@@ -29,27 +29,40 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        if (tocarAoIniciar && listaDeMusicas.Count > 0)
+        // Se estiver iniciando o jogo pelo menu, toca a música fixa do menu
+        if (tocarAoIniciar)
         {
-            TocarMusicaAleatoria();
+            TocarMusicaDoMenu();
         }
     }
 
+    // Método específico para o Menu Iniciar
+    public void TocarMusicaDoMenu()
+    {
+        if (musicaDoMenu == null) return;
+
+        // Só troca a música se ela já não estiver tocando (evita reiniciar do zero sem querer)
+        if (musicSource.clip == musicaDoMenu && musicSource.isPlaying) return;
+
+        musicSource.clip = musicaDoMenu;
+        musicSource.loop = true;
+        musicSource.pitch = 1f; // Reseta a velocidade caso tenha mudado na gameplay
+        musicSource.Play();
+    }
+
+    // Método para as fases (escolhe uma aleatória da lista)
     public void TocarMusicaAleatoria()
     {
         if (listaDeMusicas.Count == 0) return;
 
-        // Escolhe um índice aleatório da lista
         int indiceAleatorio = Random.Range(0, listaDeMusicas.Count);
         AudioClip musicaSelecionada = listaDeMusicas[indiceAleatorio];
 
-        // Configura e toca
         musicSource.clip = musicaSelecionada;
-        musicSource.loop = true; // Mantém a música em loop até o próximo "Reiniciar"
+        musicSource.loop = true; 
         musicSource.Play();
     }
 
-    // Método para ser chamado quando o jogo reiniciar
     public void ReiniciarMusica()
     {
         musicSource.Stop();
@@ -57,10 +70,18 @@ public class AudioManager : MonoBehaviour
     }
 
     public void DefinirVelocidadeMusica(float velocidade)
-{
-    if (musicSource != null)
     {
-        musicSource.pitch = velocidade;
+        if (musicSource != null)
+        {
+            musicSource.pitch = velocidade;
+        }
     }
-}
+
+    public void PararMusica()
+    {
+        if (musicSource != null)
+        {
+            musicSource.Stop();
+        }
+    }
 }

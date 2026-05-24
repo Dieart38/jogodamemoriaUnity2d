@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Card
   cardID: 0
-  fronSprite: {fileID: 0}
+  frontSprite: {fileID: 0}
   frontRenderer: {fileID: 5351034688967034555}
   backRenderer: {fileID: 4375009889573468646}
 --- !u!1 &7108655105710922435
@@ -270,7 +270,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 3797548041129462891, guid: 48d6bba2e94598b44af0d300492db8e3, type: 3}
+  m_Sprite: {fileID: -1409347871, guid: f7825e563b48a9243823631659c920b1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -288,7 +288,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7884619146561755441}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: edc9c428232842e4ea932236e9841fdd, type: 2}
   m_CullingMode: 0

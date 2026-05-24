@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
 
     private bool musicaAcelerada = false; // Flag para controlar a aceleração da música
 
+    public AudioSource musicaGameOver; // Referência para o AudioSource da música
+
     private void Awake()
     {
         if (Instance != null)
@@ -46,15 +48,17 @@ public class GameManager : MonoBehaviour
         }
         Instance = this;
         Cursor.visible = false;
-        
-        
+
+
     }
 
     void Start()
-    {
-        vitoria = 0; // Garante que a vitória comece do zero
+    {   
+        tempoRestante = 60f; // Garante que o tempo comece do valor correto
+        vitoria = 3; // Garante que a vitória comece do zero
         ConfigurarDificuldade();
         IniciarJogo();
+       
     }
 
     // Update is called once per frame
@@ -74,6 +78,9 @@ public class GameManager : MonoBehaviour
         if (tempoRestante <= 0f)
         {
             tempoRestante = 0f;
+
+            AudioManager.Instance.PararMusica(); // Para a música imediatamente
+
             GameOver();
         }
     }
@@ -81,29 +88,38 @@ public class GameManager : MonoBehaviour
     private void ConfigurarDificuldade()
     {
         linhas = 4; // Defina o padrão aqui fora para garantir que nunca seja 0 ou lixo
-        tempoRestante = 60f; // Define o tempo padrão aqui fora para garantir que nunca seja 0 
+        //tempoRestante = 60f; // Define o tempo padrão aqui fora para garantir que nunca seja 0 
         if (vitoria <= 3)
         {
             switch (vitoria)
             {
-                case 0: colunas = 3; break; // 3x4 = 12 cartas
-                case 1: colunas = 4; break; // 4x4 = 16 cartas
-                case 2: colunas = 5; break; // 5x4 = 20 cartas
+                case 0: colunas = 3; tempoRestante = 60f;break; // 3x4 = 12 cartas
+                case 1: colunas = 4; tempoRestante = 60f; break; // 4x4 = 16 cartas
+                case 2: colunas = 5; tempoRestante = 60f;break; // 5x4 = 20 cartas
                 case 3: colunas = 6; tempoRestante = 80f; break; // 6x4 = 24 cartas
             }
+             Debug.Log("Dificuldade configurada: " + colunas + "x" + linhas + " com " + tempoRestante + " segundos."+ "Vitoria: " + vitoria);
         }
-        else
+        else if (vitoria > 3)
         {
             colunas = Random.Range(3, 7);
+            switch (vitoria)
+            {
+                case 4: colunas = 3; tempoRestante = 30f; break; // 3x4 = 12 cartas
+                case 5: colunas = 4; tempoRestante = 35f; break; // 4x4 = 16 cartas
+                case 6: colunas = 5; tempoRestante = 40f; break; // 5x4 = 20 cartas
+                case 7: colunas = 6; tempoRestante = 50f; break; // 6x4 = 24 cartas
+            }
+             Debug.Log("Dificuldade configurada 2: " + colunas + "x" + linhas + " com " + tempoRestante + " segundos."+ "Vitoria: " + vitoria);
         }
 
         // Lógica do Tempo (O cálculo que você queria)
-        if (vitoria > 3 && colunas == 5)
-        {
-            float tempoCalculado = 50f - ((vitoria - 3) * 5f);
-            tempoRestante = Mathf.Max(tempoCalculado, 25f);
-        }
-
+        // if (vitoria > 3 && colunas == 5)
+        // {
+        //     float tempoCalculado = 50f - ((vitoria - 3) * 5f);
+        //     tempoRestante = Mathf.Max(tempoCalculado, 25f);
+        // }
+        
         tempoFaseInicial = tempoRestante; // Guarda o tempo inicial para cálculo posterior
         totalPares = (colunas * linhas) / 2;
     }
@@ -112,16 +128,27 @@ public class GameManager : MonoBehaviour
     {
         LimparGrid();
         musicaAcelerada = false;
-        AudioManager.Instance.DefinirVelocidadeMusica(1.0f); // Volta ao normal
+
+
+        // Verificação de segurança: se viemos do menu, o AudioManager existirá
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.DefinirVelocidadeMusica(1.0f);
+            AudioManager.Instance.TocarMusicaAleatoria(); // Sorteia e toca a música da fase
+        }
+        else
+        {
+            Debug.LogWarning("AudioManager não encontrado. Lembre-se de iniciar o jogo pela cena do Menu para a música funcionar!");
+        }
+
         tentativas = 0;
         paresEncontrados = 0;
-        //tempoRestante = 60f;
         jogoAtivo = true;
         UIManager.Instance.AtualizarTentativas(tentativas);
         UIManager.Instance.AtualizarPares(paresEncontrados, totalPares);
+        UIManager.Instance.AtualizarVitorias(vitoria);
 
         CriarGrid();
-
     }
 
 
@@ -270,34 +297,47 @@ public class GameManager : MonoBehaviour
     {
         jogoAtivo = false;
         UIManager.Instance.MostrarGameOver();
+        // tocar musica de game over
+        if (musicaGameOver != null)
+        {
+            if(UIManager.Instance.gameoverCont==true){musicaGameOver.Play();}
+            
+        }
+
     }
 
     public void Reiniciar()
     {
+        // 1. ZERA TODAS AS VARIÁVEIS
+
         vitoria = 0;
         tempoTotalSessao = 0;       // ZERA AQUI
         tentativasTotaisSessao = 0; // ZERA AQUI
-
+        // volta a velocidade da musica ao normal
+        AudioManager.Instance.DefinirVelocidadeMusica(1.0f);
         UIManager.Instance.EsconderPaineis();
 
         // 2. Recalcula a dificuldade com vitoria valendo 0
         ConfigurarDificuldade();
 
         IniciarJogo();
+
+
     }
 
     public void ProximoNivel()
     {
         UIManager.Instance.EsconderPaineis();
-        VideoTransitionManager.Instance.IniciarTransicao();
-        //ConfigurarDificuldade();
-        //IniciarJogo();
-    }
-    public void ProximoNivelAposVideo()
-    {
+        AudioManager.Instance.DefinirVelocidadeMusica(1.0f);
+        //VideoTransitionManager.Instance.IniciarTransicao();
         ConfigurarDificuldade();
         IniciarJogo();
     }
+    // public void ProximoNivelAposVideo()
+    // {
+    //     ConfigurarDificuldade();
+    //     IniciarJogo();
+    // }
 
 
 }
