@@ -1,0 +1,149 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2041189102968996841
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2714666915937462874}
+  - component: {fileID: 6138904003934082862}
+  m_Layer: 0
+  m_Name: TransitionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2714666915937462874
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041189102968996841}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.86044, y: -3.06169, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6138904003934082862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041189102968996841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01144fbad3a23d748974e173f5bbaad7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TransitionManager
+  painelTransicao: {fileID: 0}
+  imgCartaExpandida: {fileID: 0}
+  txtDescricao: {fileID: 0}
+  barraCarregamento: {fileID: 0}
+  tempoDeCarregamento: 5
+  listaDePersonagens:
+  - nomePersonagem: CaTros - Cat Of War
+    arteDaCarta: {fileID: 220134991, guid: f7825e563b48a9243823631659c920b1, type: 3}
+    descricao: "Um gato guerreiro espartano que \xE9 enganado pelo deus Ares para
+      matar sua pr\xF3pria fam\xEDlia. Para se vingar e buscar reden\xE7\xE3o, ele
+      desafia pante\xF5es inteiros: primeiro destruindo o Olimpo na Miauologia Grega "
+  - nomePersonagem: CatLoy - Horizon Cat Down
+    arteDaCarta: {fileID: -1413070094, guid: f7825e563b48a9243823631659c920b1, type: 3}
+    descricao: "Rejeitada pela tribo de Gatos Nora (a tribo Nora consiste num grupo
+      de ca\xE7adores ferozes que vivem nas montanhas e adoram a natureza, conhecida
+      carinhosamente por eles como \"All-Mother), \xE9 colocada sobre os cuidados
+      de RostCat, um outro exilado que se torna na sua figura paternal."
+  - nomePersonagem: CaT-Zero - CatCombat
+    arteDaCarta: {fileID: -1974146539, guid: f7825e563b48a9243823631659c920b1, type: 3}
+    descricao: "O guerreiro mais letal do cl\xE3 de assassinos chineses Catin Kuei.
+      Nascido com a habilidade da criomancia (o poder de controlar o gelo), ele era
+      frequentemente contratado para miss\xF5es extremas. Sua lealdade era inteiramente
+      ao cl\xE3, e ele n\xE3o demonstrava remorso por suas v\xEDtimas."
+  - nomePersonagem: CatScorpions- CatCombat
+    arteDaCarta: {fileID: -759138874, guid: f7825e563b48a9243823631659c920b1, type: 3}
+    descricao: "Hanzo Catsashi, antes um guerreiro do cl\xE3 rival, foi assassinado
+      a sangue frio pelo seu arqui-inimigo do Catin Kuei. Renascido das profundezas
+      da Caixa de Areia Sombria como um espectro implac\xE1vel, ele agora vaga pelo
+      mundo guiado por uma \xFAnica miss\xE3o: cobrar a fatura e garantir sua vingan\xE7a
+      felina, eternamente disparando seu golpe mortal com o cl\xE1ssico aviso: \"Vem
+      c\xE1, miau!\""
+  - nomePersonagem: Hollow Catnight - Hollow Catnight
+    arteDaCarta: {fileID: 3787817111797890948, guid: f7825e563b48a9243823631659c920b1, type: 3}
+    descricao: "Um pequeno, silencioso e misterioso guerreiro de pelugem escura,
+      nascido nas profundezas esquecidas do reino soterrado de Hallownest-miau.Ningu\xE9m
+      sabe ao certo o que se esconde sob sua m\xE1scara inexpressiva, mas o seu miado
+      silencioso imp\xF5e respeito em qualquer gatinho das sombras"
+  - nomePersonagem: Catman - the Catman Catnight
+    arteDaCarta: {fileID: 310908291, guid: f7825e563b48a9243823631659c920b1, type: 3}
+    descricao: "Uma lenda sombria que espreita os telhados de Gotham-Miau. O bilion\xE1rio
+      felino Cat Wayne usa uma capa preta e orelhas pontudas para aterrorizar os
+      criminosos locais. Munido de muita ast\xFAcia, engenhocas e uma f\xFAria implac\xE1vel
+      contra o crime, ele patrulha a escurid\xE3o na calada da noite. Para os bandidos,
+      ele \xE9 apenas uma sombra aterrorizante; para os gatinhos indefesos, o her\xF3i
+      que mia na escurid\xE3o."
+  - nomePersonagem: GeCat de Rimial
+    arteDaCarta: {fileID: 557077450, guid: f7825e563b48a9243823631659c920b1, type: 3}
+    descricao: "Um mutante felino de cabelos brancos e olhar penetrante, criado nas
+      escolas de bruxos para ca\xE7ar as piores pragas e monstros de Rimial. Munido
+      de duas espadas (uma de a\xE7o para c\xE3es barulhentos e outra de prata para
+      criaturas sobrenaturais), ele vaga pelos caminhos empoeirados aceitando contratos
+      em troca de potes de atum e moedas de ouro. Resmung\xE3o, pragm\xE1tico e sempre
+      pronto para uma ca\xE7ada, ele s\xF3 tem um grande defeito: por onde passa,
+      os outros gatos o encaram com desconfian\xE7a e arqueiam as costas, afinal,
+      ele carrega o cheiro da perigosa Muta\xE7\xE3omiau."
+  - nomePersonagem: Princesa Miau - CatBros
+    arteDaCarta: {fileID: -1802346944, guid: f7825e563b48a9243823631659c920b1, type: 3}
+    descricao: "A soberana absolut\xEDssima e mais elegante do Reino do Pote de Leite.
+      Sempre usando um vestido cor-de-rosa impec\xE1vel e uma coroa brilhante, ela
+      parece a gatinha mais d\xF3cil e indefesa de todas, vivendo de castelo em castelo.
+      No entanto, n\xE3o se engane com sua carinha fofa: quando a situa\xE7\xE3o
+      aperta ou o Bowser-gato aparece querendo roubar seus petiscos, ela n\xE3o hesita
+      em pegar um guarda-chuva voador, dar um salto girat\xF3rio ou mostrar que \xE9
+      muito mais do que apenas uma donzela em perigo!"
+  - nomePersonagem: MegaCat- MegaCat X
+    arteDaCarta: {fileID: -1409523554, guid: f7825e563b48a9243823631659c920b1, type: 3}
+    descricao: "Um pequeno rob\xF4 felino de armadura azul e elmo pontudo, criado
+      pelo brilhante Dr. Light-miau. Quando o malvado Dr. Wily rouba os rob\xF4s
+      da cidade para tentar dominar o mundo, Megacat entra em a\xE7\xE3o. Equipado
+      com o seu poderoso canh\xE3o laser e a incr\xEDvel habilidade de absorver os
+      poderes tecnol\xF3gicos de seus chefes derrotados, ele racha o ch\xE3o e pula
+      plataformas com precis\xE3o milim\xE9trica para salvar o dia, sempre acompanhado
+      por seu fiel c\xE3o-rob\xF4 ajudante... ou melhor, seu fiel c\xE3o-rob\xF4
+      que ele tolera por amizade!"
+  - nomePersonagem: Cloud Catstrife - Cat Fantasy VII
+    arteDaCarta: {fileID: 1581718907, guid: f7825e563b48a9243823631659c920b1, type: 3}
+    descricao: "Um ex-soldado de cabelos loiros arrepiados e olhar melanc\xF3lico,
+      marcado pelas mem\xF3rias confusas de um passado misterioso. Munido de uma
+      espada gigantesca do tamanho de dois gatos (pesada demais para qualquer felino
+      comum, mas perfeitamente equilibrada para ele), ele vaga pelos cabos de alta
+      tens\xE3o e pelos esgotos de Midgar aceitando trabalhos mercen\xE1rios em troca
+      de potes de atum. Embora pare\xE7a dur\xE3o, distante e indiferente, ele tem
+      um bom cora\xE7\xE3o \u2014 e quando o perigo se aproxima ou a Shinra-miau
+      tenta acabar com o planeta, ele entra em a\xE7\xE3o liberando todo o poder
+      da sua Mat\xE9ria m\xEDstica e de seus Limit Breaks!"
+  - nomePersonagem: Catmario - CatBros
+    arteDaCarta: {fileID: -797271765, guid: bd2301933df42d64cb5f02ab2a1ad266, type: 3}
+    descricao: "O gatinho mais famoso e saltitante do Reino do Pote de Leite. Com
+      seu macac\xE3o jeans ajustado, bon\xE9 vermelho cl\xE1ssico e bigode impec\xE1vel,
+      ele \xE9 especialista em pular obst\xE1culos, esmagar Goombas indesejados e
+      atravessar canos de esgoto na velocidade da luz. Seja devorando um cogumelo
+      m\xE1gico, atirando bolas de fogo pelas patas ou vestindo uma roupa de guaxinim,
+      ele n\xE3o mede esfor\xE7os para resgatar a princesa e salvar o dia, sempre
+      com um animado \"It's-a me, Miau!\""
+  - nomePersonagem: Catluigi - CatBros
+    arteDaCarta: {fileID: 161376337, guid: bd2301933df42d64cb5f02ab2a1ad266, type: 3}
+    descricao: "O irm\xE3o mais alto Catmario, magricela e ligeiramente medroso da
+      dupla. Vestido com seu macac\xE3o verde e bon\xE9 caracter\xEDstico, ele vive
+      \xE0 sombra do irm\xE3o mais velho, mas tem saltos muito mais altos e um talento
+      nato para escapar de situa\xE7\xF5es assustadoras. Quando n\xE3o est\xE1 ajudando
+      a salvar o reino, ele passa os dias morrendo de medo de fantasmas em mans\xF5es
+      mal-assombradas, aspirando poeira com seu v\xE1cuo m\xE1gico ou provando que
+      os segundistas tamb\xE9m podem brilhar (mesmo tremendo nas bases)."

@@ -20,6 +20,7 @@ public class UIManager : MonoBehaviour
     public GameObject vitoriaPanel;
     public GameObject gameOverPanel;
     public bool gameoverCont = false;
+    public GameObject PainelDePause;
 
     [Header("Textos do Paineis")]
     public Text txtVitoria; // dentro do vitoriaPanel
@@ -86,6 +87,8 @@ public class UIManager : MonoBehaviour
     {
         vitoriaPanel.SetActive(false);
         gameOverPanel.SetActive(false);
+        recordesPanel.SetActive(false);
+       //PainelDePause.SetActive(false);
     }
     // Chamado pelo botao de reiniciar (configurado no inspector)
     public void BotaReiniciar()
@@ -105,7 +108,8 @@ public class UIManager : MonoBehaviour
     {
         recordesPanel.SetActive(false);
         vitoriaPanel.SetActive(false);
-        StartCoroutine(SequenciaDeSaida());
+        PainelDePause.SetActive(false);        StartCoroutine(SequenciaDeSaida());
+        
 
     }
 
@@ -125,6 +129,7 @@ public class UIManager : MonoBehaviour
 
         inputScorePanel.SetActive(false);
         btnConfirmar.enabled = false;
+        
         MostrarPainelRecordes();
     }
 
@@ -153,7 +158,7 @@ public class UIManager : MonoBehaviour
         } 
         else if(vitoriaPanel==true) vitoriaPanel.SetActive(true);
     }
-    private IEnumerator SequenciaDeSaida()
+    public IEnumerator SequenciaDeSaida()
     {
         // 1. Mostra o agradecimento
         if (painelAgradecimento != null)
@@ -168,11 +173,21 @@ public class UIManager : MonoBehaviour
 
         // 3. Fecha o jogo de verdade
         Debug.Log("Fechando o sistema.");
+        // 4. conta 1 segundo antes de fechar o jogo
+        yield return new WaitForSeconds(0.5f);
+        // Encerra a aplicação/jogo
+        
+        Application.Quit();
+        // O Application.Quit() não funciona dentro do Editor da Unity.
+        // A linha abaixo serve para testar o fechamento enquanto você joga no Editor:
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+        #endif
 
 #if UNITY_EDITOR
         EditorApplication.isPlaying = false;
 #else
-            Application.Quit();
+        Application.Quit();
 #endif
     }
 
@@ -185,5 +200,13 @@ public class UIManager : MonoBehaviour
         }
         //chamar proximo nivel
         GameManager.Instance.ProximoNivel();
+    }
+    public void PausarJogo()
+    {
+        if (PainelDePause != null)
+        {
+            PainelDePause.SetActive(true);
+        }
+        Time.timeScale = 0f; // Congela o tempo do jogo
     }
 }

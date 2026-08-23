@@ -8,84 +8,119 @@ public class ControllerCursor : MonoBehaviour
     public RectTransform cursorVisual; 
     
     private Vector2 posicaoVirtual;
-    private Vector2 ultimaPosicaoMouse; // Guarda a posição do mouse no frame anterior
+    private Vector2 ultimaPosicaoMouse;
+
+    // NOVO: Referência para guardar o slider que estamos "agarrando"
+    private GameObject objetoSendoArrastado = null;
 
     void Awake()
     {
-        if (cursorVisual == null)
-        {
-            Debug.LogError("ControllerCursor: O cursorVisual não foi atribuído no Inspector.");
-        }
-        
+        if (cursorVisual == null) Debug.LogError("ControllerCursor: O cursorVisual não foi atribuído.");
     }
 
     void Start()
     {
+        velocidade = PlayerPrefs.GetFloat("CursorSpeed", 500f);
         posicaoVirtual = new Vector2(Screen.width / 2, Screen.height / 2);
         ultimaPosicaoMouse = Input.mousePosition;
-        Cursor.visible = false; // Esconde o cursor real do sistema
+        Cursor.visible = false;
     }
 
     void Update()
     {
-        // 1. DETECTAR MOVIMENTO DO MOUSE
+        // 1. MOVIMENTO (Mouse e Controle)
         Vector2 mouseAtual = Input.mousePosition;
-        
-        // Se a posição atual do mouse for diferente da última, o usuário mexeu o mouse
         if (mouseAtual != ultimaPosicaoMouse)
         {
             posicaoVirtual = mouseAtual;
             ultimaPosicaoMouse = mouseAtual;
         }
 
-        // 2. CAPTURAR MOVIMENTO DO CONTROLE (Analógico/Setas)
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        // O controle move o cursor a partir da posição atual (seja ela vinda do mouse ou do stick)
-        posicaoVirtual.x += horizontal * velocidade * Time.deltaTime;
-        posicaoVirtual.y += vertical * velocidade * Time.deltaTime;
+        posicaoVirtual.x += horizontal * velocidade * Time.unscaledDeltaTime;
+        posicaoVirtual.y += vertical * velocidade * Time.unscaledDeltaTime;
 
-        // 3. LIMITAR E ATUALIZAR VISUAL
         posicaoVirtual.x = Mathf.Clamp(posicaoVirtual.x, 0, Screen.width);
         posicaoVirtual.y = Mathf.Clamp(posicaoVirtual.y, 0, Screen.height);
 
         cursorVisual.position = posicaoVirtual;
 
-        // 4. CLIQUE (Aceita Botão A do Xbox, Enter ou Clique Esquerdo do Mouse)
-        if (Input.GetKeyDown(KeyCode.JoystickButton0) || Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
-        {
-            SimularClique();
-        }
+        // 2. GERENCIAR CLIQUES E ARRASTOS
+        GerenciarInteracao();
     }
 
-    void SimularClique()
+    void GerenciarInteracao()
     {
         PointerEventData pointerData = new PointerEventData(EventSystem.current);
         pointerData.position = posicaoVirtual;
 
-        List<RaycastResult> uiResults = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(pointerData, uiResults);
+        // Lemos os 3 estados possíveis do botão/mouse
+        bool botaoPressionado = Input.GetKeyDown(KeyCode.JoystickButton0) || Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0);
+        bool botaoSegurado = Input.GetKey(KeyCode.JoystickButton0) || Input.GetKey(KeyCode.Return) || Input.GetMouseButton(0);
+        bool botaoSolto = Input.GetKeyUp(KeyCode.JoystickButton0) || Input.GetKeyUp(KeyCode.Return) || Input.GetMouseButtonUp(0);
 
-        if (uiResults.Count > 0)
+        // --- ESTADO 1: O JOGADOR APERTOU O BOTÃO AGORA ---
+        if (botaoPressionado)
         {
-            foreach (var result in uiResults)
+            cursorVisual.localScale = Vector3.one * 0.8f; // Efeito visual de clique
+
+            List<RaycastResult> uiResults = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(pointerData, uiResults);
+
+            // Bateu em UI?
+            if (uiResults.Count > 0)
             {
-                GameObject targetComEvento = ExecuteEvents.GetEventHandler<IPointerClickHandler>(result.gameObject);
-                if (targetComEvento != null)
+                GameObject uiElement = uiResults[0].gameObject;
+
+                // Tenta Clicar (Botões normais)
+                GameObject clickTarget = ExecuteEvents.GetEventHandler<IPointerClickHandler>(uiElement);
+                if (clickTarget != null) ExecuteEvents.Execute(clickTarget, pointerData, ExecuteEvents.pointerClickHandler);
+
+                // Tenta Agarrar (Sliders e Barras de Rolagem)
+                GameObject dragTarget = ExecuteEvents.GetEventHandler<IDragHandler>(uiElement);
+                if (dragTarget != null)
                 {
-                    ExecuteEvents.Execute(targetComEvento, pointerData, ExecuteEvents.pointerClickHandler);// Simula o clique no objeto UI 
-                    return; 
+                    objetoSendoArrastado = dragTarget; // Salva o slider que pegamos
+                    ExecuteEvents.Execute(objetoSendoArrastado, pointerData, ExecuteEvents.pointerDownHandler);
+                    ExecuteEvents.Execute(objetoSendoArrastado, pointerData, ExecuteEvents.beginDragHandler);
+                }
+
+                return; // Bloqueia para não atingir as cartas!
+            }
+
+            // Se não bateu na UI e o jogo não tá pausado, interage com as cartas
+            if (Time.timeScale != 0f)
+            {
+                Vector2 worldPos = Camera.main.ScreenToWorldPoint(posicaoVirtual);
+                RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
+                if (hit.collider != null)
+                {
+                    Card cartaClicada = hit.collider.GetComponent<Card>();
+                    if (cartaClicada != null) cartaClicada.HandleCardPress();
                 }
             }
         }
 
-        Vector2 worldPos = Camera.main.ScreenToWorldPoint(posicaoVirtual);
-        RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
-
-        if (hit.collider != null)
+        // --- ESTADO 2: O JOGADOR ESTÁ SEGURANDO E MOVENDO ---
+        if (botaoSegurado && objetoSendoArrastado != null)
         {
-            hit.collider.gameObject.SendMessage("HandleCardPress", SendMessageOptions.DontRequireReceiver);
+            // Fica mandando a nova posição para o slider enquanto o botão estiver apertado
+            ExecuteEvents.Execute(objetoSendoArrastado, pointerData, ExecuteEvents.dragHandler);
+        }
+
+        // --- ESTADO 3: O JOGADOR SOLTOU O BOTÃO ---
+        if (botaoSolto)
+        {
+            cursorVisual.localScale = Vector3.one; // Restaura tamanho do cursor
+
+            if (objetoSendoArrastado != null)
+            {
+                ExecuteEvents.Execute(objetoSendoArrastado, pointerData, ExecuteEvents.pointerUpHandler);
+                ExecuteEvents.Execute(objetoSendoArrastado, pointerData, ExecuteEvents.endDragHandler);
+                objetoSendoArrastado = null; // Limpa a referência
+            }
         }
     }
 }

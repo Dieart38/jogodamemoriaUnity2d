@@ -7,6 +7,8 @@ using UnityEditor; // Necessário para fechar o jogo no Editor
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Rastreio de Objetos")]
+    private List<Card> cartasEmJogo = new List<Card>();
     public static GameManager Instance { get; private set; }
     [Header("Configuracao do Grid")]
     public int colunas;
@@ -53,12 +55,12 @@ public class GameManager : MonoBehaviour
     }
 
     void Start()
-    {   
+    {
         tempoRestante = 60f; // Garante que o tempo comece do valor correto
-        vitoria = 3; // Garante que a vitória comece do zero
+        vitoria = 0; // Garante que a vitória comece do zero
         ConfigurarDificuldade();
         IniciarJogo();
-       
+
     }
 
     // Update is called once per frame
@@ -93,12 +95,12 @@ public class GameManager : MonoBehaviour
         {
             switch (vitoria)
             {
-                case 0: colunas = 3; tempoRestante = 60f;break; // 3x4 = 12 cartas
+                case 0: colunas = 3; tempoRestante = 60f; break; // 3x4 = 12 cartas
                 case 1: colunas = 4; tempoRestante = 60f; break; // 4x4 = 16 cartas
-                case 2: colunas = 5; tempoRestante = 60f;break; // 5x4 = 20 cartas
+                case 2: colunas = 5; tempoRestante = 60f; break; // 5x4 = 20 cartas
                 case 3: colunas = 6; tempoRestante = 80f; break; // 6x4 = 24 cartas
             }
-             Debug.Log("Dificuldade configurada: " + colunas + "x" + linhas + " com " + tempoRestante + " segundos."+ "Vitoria: " + vitoria);
+            Debug.Log("Dificuldade configurada: " + colunas + "x" + linhas + " com " + tempoRestante + " segundos." + "Vitoria: " + vitoria);
         }
         else if (vitoria > 3)
         {
@@ -110,7 +112,7 @@ public class GameManager : MonoBehaviour
                 case 6: colunas = 5; tempoRestante = 40f; break; // 5x4 = 20 cartas
                 case 7: colunas = 6; tempoRestante = 50f; break; // 6x4 = 24 cartas
             }
-             Debug.Log("Dificuldade configurada 2: " + colunas + "x" + linhas + " com " + tempoRestante + " segundos."+ "Vitoria: " + vitoria);
+            Debug.Log("Dificuldade configurada 2: " + colunas + "x" + linhas + " com " + tempoRestante + " segundos." + "Vitoria: " + vitoria);
         }
 
         // Lógica do Tempo (O cálculo que você queria)
@@ -119,7 +121,7 @@ public class GameManager : MonoBehaviour
         //     float tempoCalculado = 50f - ((vitoria - 3) * 5f);
         //     tempoRestante = Mathf.Max(tempoCalculado, 25f);
         // }
-        
+
         tempoFaseInicial = tempoRestante; // Guarda o tempo inicial para cálculo posterior
         totalPares = (colunas * linhas) / 2;
     }
@@ -129,12 +131,11 @@ public class GameManager : MonoBehaviour
         LimparGrid();
         musicaAcelerada = false;
 
-
-        // Verificação de segurança: se viemos do menu, o AudioManager existirá
+        // Verificação de segurança original sua
         if (AudioManager.Instance != null)
         {
             AudioManager.Instance.DefinirVelocidadeMusica(1.0f);
-            AudioManager.Instance.TocarMusicaAleatoria(); // Sorteia e toca a música da fase
+            AudioManager.Instance.TocarMusicaAleatoria();
         }
         else
         {
@@ -143,18 +144,31 @@ public class GameManager : MonoBehaviour
 
         tentativas = 0;
         paresEncontrados = 0;
-        jogoAtivo = true;
+
+        // 1. A MUDANÇA ESTÁ AQUI: Antes era true, agora começa false!
+        jogoAtivo = false;
+
         UIManager.Instance.AtualizarTentativas(tentativas);
         UIManager.Instance.AtualizarPares(paresEncontrados, totalPares);
         UIManager.Instance.AtualizarVitorias(vitoria);
 
         CriarGrid();
-    }
 
+        // 2. A MUDANÇA ESTÁ AQUI: Iniciamos a memorização no final
+        StartCoroutine(RotinaDeMemorizacao());
+    }
+    private void LimparGrid()
+    {
+        // Apaga todas as cartas que estão na nossa lista
+        foreach (Card c in cartasEmJogo)
+        {
+            if (c != null) Destroy(c.gameObject);
+        }
+        cartasEmJogo.Clear(); // Limpa a lista para a próxima fase
+    }
 
     private void CriarGrid()
     {
-
         List<int> ids = new List<int>();
         for (int i = 0; i < totalPares; i++)
         {
@@ -163,23 +177,18 @@ public class GameManager : MonoBehaviour
         }
         Embaralhar(ids);
 
-        // Calcula usando os novos espaços
         float larguraTotal = (colunas - 1) * espacoHorizontal;
         float alturaTotal = (linhas - 1) * espacoVertical;
-
         float startX = -larguraTotal / 2f;
         float startY = alturaTotal / 2f;
 
         int index = 0;
         for (int l = 0; l < linhas; l++)
         {
-
             for (int c = 0; c < colunas; c++)
             {
-                // X usa espacoHorizontal, Y usa espacoVertical
                 float posX = startX + (c * espacoHorizontal);
                 float posY = startY - (l * espacoVertical);
-
                 Vector3 pos = new Vector3(posX, posY, 0f);
 
                 GameObject obj = Instantiate(cardPrefab, pos, Quaternion.identity);
@@ -192,16 +201,13 @@ public class GameManager : MonoBehaviour
                 }
 
                 obj.name = $"Card_{ids[index]}_{index}";
+
+                // NOVO: Adicionamos a carta na lista oficial de rastreio!
+                cartasEmJogo.Add(card);
+
                 index++;
             }
         }
-    }
-    private void LimparGrid()
-    {
-        Card[] cartas = FindObjectsByType<Card>(
-            FindObjectsSortMode.None);
-        foreach (var c in cartas)
-            Destroy(c.gameObject);
     }
 
     private void Embaralhar(List<int> lista)
@@ -243,6 +249,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
         if (primeiraCarta.cardID == segundaCarta.cardID)
         {
+
             // Par encontrado
             SoundManager.Instance.playMatch();
 
@@ -264,6 +271,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            // Erro
+            SoundManager.Instance.playLose();
             primeiraCarta.FlipToBack();
             segundaCarta.FlipToBack();
         }
@@ -300,44 +309,76 @@ public class GameManager : MonoBehaviour
         // tocar musica de game over
         if (musicaGameOver != null)
         {
-            if(UIManager.Instance.gameoverCont==true){musicaGameOver.Play();}
-            
+            if (UIManager.Instance.gameoverCont == true) { musicaGameOver.Play(); }
+
         }
 
     }
 
     public void Reiniciar()
     {
-        // 1. ZERA TODAS AS VARIÁVEIS
-
         vitoria = 0;
-        tempoTotalSessao = 0;       // ZERA AQUI
-        tentativasTotaisSessao = 0; // ZERA AQUI
-        // volta a velocidade da musica ao normal
-        AudioManager.Instance.DefinirVelocidadeMusica(1.0f);
+        tempoTotalSessao = 0;
+        tentativasTotaisSessao = 0;
+
+        if (AudioManager.Instance != null) AudioManager.Instance.DefinirVelocidadeMusica(1.0f);
         UIManager.Instance.EsconderPaineis();
 
-        // 2. Recalcula a dificuldade com vitoria valendo 0
-        ConfigurarDificuldade();
+        // Se reiniciou, queremos resetar a memória das cartas que já apareceram no loading
+        if (TransitionManager.Instance != null) TransitionManager.Instance.ResetarSacola();
 
-        IniciarJogo();
-
-
+        // Dispara o loading e, quando terminar, executa o método ConfigurarEIniciar
+        if (TransitionManager.Instance != null)
+        {
+            TransitionManager.Instance.IniciarTransicao(ConfigurarEIniciar);
+        }
+        else
+        {
+            // Fallback caso esqueça de colocar o script na cena
+            ConfigurarEIniciar();
+        }
     }
 
     public void ProximoNivel()
     {
         UIManager.Instance.EsconderPaineis();
-        AudioManager.Instance.DefinirVelocidadeMusica(1.0f);
-        //VideoTransitionManager.Instance.IniciarTransicao();
+        if (AudioManager.Instance != null) AudioManager.Instance.DefinirVelocidadeMusica(1.0f);
+
+        // Dispara a transição e passa a função ConfigurarEIniciar como parâmetro
+        if (TransitionManager.Instance != null)
+        {
+            TransitionManager.Instance.IniciarTransicao(ConfigurarEIniciar);
+        }
+        else
+        {
+            ConfigurarEIniciar();
+        }
+    }
+
+    // NOVO MÉTODO: Agrupa as ações pós-loading
+    private void ConfigurarEIniciar()
+    {
         ConfigurarDificuldade();
         IniciarJogo();
     }
-    // public void ProximoNivelAposVideo()
-    // {
-    //     ConfigurarDificuldade();
-    //     IniciarJogo();
-    // }
+
+    private IEnumerator RotinaDeMemorizacao()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        SoundManager.Instance.PlayFlip();
+
+        // Usamos a nossa própria lista em vez de forçar a engine a procurar na cena!
+        foreach (Card carta in cartasEmJogo) carta.FlipToFront();
+
+        yield return new WaitForSeconds(2.5f);
+        SoundManager.Instance.PlayFlip();
+
+        foreach (Card carta in cartasEmJogo) carta.FlipToBack();
+
+        yield return new WaitForSeconds(0.35f);
+        jogoAtivo = true;
+    }
 
 
 }

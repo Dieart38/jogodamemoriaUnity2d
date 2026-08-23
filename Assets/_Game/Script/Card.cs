@@ -21,37 +21,9 @@ public class Card : MonoBehaviour
         ShowBack();
     }
 
-    // ─── INPUT UNIFICADO ──────────────────────────────────────────────────────
+      
 
-    private void Update()
-    {
-        // PC / Editor: mouse
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector2 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
-
-            if (hit.collider != null && hit.collider.gameObject == gameObject)
-                HandleCardPress();
-        }
-
-        // Android: toque
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-
-            if (touch.phase == TouchPhase.Began)
-            {
-                Vector2 worldPos = Camera.main.ScreenToWorldPoint(touch.position);
-                RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
-
-                if (hit.collider != null && hit.collider.gameObject == gameObject)
-                    HandleCardPress();
-            }
-        }
-    }
-
-    private void HandleCardPress()
+    public void HandleCardPress()
     {
         Debug.Log($"Carta clicada: {cardID}"); // remove depois
 

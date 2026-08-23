@@ -9,6 +9,7 @@ public class SoundManager : MonoBehaviour
     [Header("Configurações de Áudio")]
     // Mudamos de AudioClip para uma Array (lista)
     public AudioClip[] sonsDeAcerto; 
+    public AudioClip sonsDeErro;
     public AudioClip somViraCarta;
     public AudioClip somVitoria;
 
@@ -39,4 +40,9 @@ public class SoundManager : MonoBehaviour
     {
         audioSource.PlayOneShot(somVitoria);
     }
+    public void playLose()
+    {
+        audioSource.PlayOneShot(sonsDeErro);
+    }
+
 }
