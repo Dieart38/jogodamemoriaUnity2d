@@ -56,10 +56,19 @@ public class ControllerCursor : MonoBehaviour
         PointerEventData pointerData = new PointerEventData(EventSystem.current);
         pointerData.position = posicaoVirtual;
 
-        // Lemos os 3 estados possíveis do botão/mouse
-        bool botaoPressionado = Input.GetKeyDown(KeyCode.JoystickButton0) || Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0);
+        // 1. SEPARAMOS QUEM ESTÁ CLICANDO (Mouse ou Controle)
+        bool cliqueDeMouse = Input.GetMouseButtonDown(0);
+        bool cliqueDeControle = Input.GetKeyDown(KeyCode.JoystickButton0) || Input.GetKeyDown(KeyCode.Return);
+        bool botaoPressionado = cliqueDeMouse || cliqueDeControle;
+
         bool botaoSegurado = Input.GetKey(KeyCode.JoystickButton0) || Input.GetKey(KeyCode.Return) || Input.GetMouseButton(0);
         bool botaoSolto = Input.GetKeyUp(KeyCode.JoystickButton0) || Input.GetKeyUp(KeyCode.Return) || Input.GetMouseButtonUp(0);
+
+        // 2. MATA O FOCO NATIVO (Impede o bug de duplo-clique ao apertar Enter/Botão Sul)
+        if (EventSystem.current.currentSelectedGameObject != null)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+        }
 
         // --- ESTADO 1: O JOGADOR APERTOU O BOTÃO AGORA ---
         if (botaoPressionado)
@@ -74,23 +83,29 @@ public class ControllerCursor : MonoBehaviour
             {
                 GameObject uiElement = uiResults[0].gameObject;
 
-                // Tenta Clicar (Botões normais)
-                GameObject clickTarget = ExecuteEvents.GetEventHandler<IPointerClickHandler>(uiElement);
-                if (clickTarget != null) ExecuteEvents.Execute(clickTarget, pointerData, ExecuteEvents.pointerClickHandler);
-
-                // Tenta Agarrar (Sliders e Barras de Rolagem)
-                GameObject dragTarget = ExecuteEvents.GetEventHandler<IDragHandler>(uiElement);
-                if (dragTarget != null)
+                // 3. BLINDAGEM DO MOUSE 
+                // Se foi o Mouse, o EventSystem nativo da Unity JÁ clicou sozinho. 
+                // Só injetamos o nosso clique virtual se o jogador usar Teclado/Controle!
+                if (cliqueDeControle) 
                 {
-                    objetoSendoArrastado = dragTarget; // Salva o slider que pegamos
-                    ExecuteEvents.Execute(objetoSendoArrastado, pointerData, ExecuteEvents.pointerDownHandler);
-                    ExecuteEvents.Execute(objetoSendoArrastado, pointerData, ExecuteEvents.beginDragHandler);
+                    // Tenta Clicar (Botões normais)
+                    GameObject clickTarget = ExecuteEvents.GetEventHandler<IPointerClickHandler>(uiElement);
+                    if (clickTarget != null) ExecuteEvents.Execute(clickTarget, pointerData, ExecuteEvents.pointerClickHandler);
+
+                    // Tenta Agarrar (Sliders e Barras de Rolagem)
+                    GameObject dragTarget = ExecuteEvents.GetEventHandler<IDragHandler>(uiElement);
+                    if (dragTarget != null)
+                    {
+                        objetoSendoArrastado = dragTarget; // Salva o slider que pegamos
+                        ExecuteEvents.Execute(objetoSendoArrastado, pointerData, ExecuteEvents.pointerDownHandler);
+                        ExecuteEvents.Execute(objetoSendoArrastado, pointerData, ExecuteEvents.beginDragHandler);
+                    }
                 }
 
-                return; // Bloqueia para não atingir as cartas!
+                return; // Bloqueia o clique de vazar para trás (não atinge as cartas)
             }
 
-            // Se não bateu na UI e o jogo não tá pausado, interage com as cartas
+            // Se não bateu na UI e o jogo não tá pausado, interage com as cartas do jogo
             if (Time.timeScale != 0f)
             {
                 Vector2 worldPos = Camera.main.ScreenToWorldPoint(posicaoVirtual);
@@ -103,10 +118,9 @@ public class ControllerCursor : MonoBehaviour
             }
         }
 
-        // --- ESTADO 2: O JOGADOR ESTÁ SEGURANDO E MOVENDO ---
+        // --- ESTADO 2: O JOGADOR ESTÁ SEGURANDO E MOVENDO (Apenas Controle) ---
         if (botaoSegurado && objetoSendoArrastado != null)
         {
-            // Fica mandando a nova posição para o slider enquanto o botão estiver apertado
             ExecuteEvents.Execute(objetoSendoArrastado, pointerData, ExecuteEvents.dragHandler);
         }
 

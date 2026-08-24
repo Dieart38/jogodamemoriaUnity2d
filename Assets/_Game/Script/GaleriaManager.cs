@@ -1,18 +1,23 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // Mude para 'using UnityEngine.UI;' se estiver usando o componente Text padrão
+using System.Collections.Generic;
+using UnityEngine.UI; // Mude para UnityEngine.UI se usar Text normal
 
 public class GaleriaManager : MonoBehaviour
 {
-    [Header("Referências de UI")]
+    [Header("Painéis")]
     public GameObject painelGaleria;
-    public GameObject painelMenuPrincipal; // Para poder voltar
+    public GameObject painelMenuPrincipal;
+
+    [Header("Elementos de UI")]
     public Image imgCartaGaleria;
-    public Text txtDescricaoGaleria; // Se usar texto normal, mude para Text
+    public Text txtDescricaoGaleria; // Se for Text normal, mude o tipo
     public Text txtContador;        // Ex: "1 / 12"
 
-    [Header("Banco de Dados")]
-    // Podemos puxar a mesma lista do TransitionManager para não duplicar dados!
+    [Header("Banco de Dados Local (Lore)")]
+    // A lista agora mora aqui dentro! Você preenche direto no Inspector desta cena.
+    public List<PersonagemLore> listaDePersonagensLocal;
+
     private int indiceAtual = 0;
 
     void Start()
@@ -40,12 +45,12 @@ public class GaleriaManager : MonoBehaviour
     // Chamado pelo botão "Avançar" (Próximo)
     public void ProximoPersonagem()
     {
-        if (TransitionManager.Instance == null || TransitionManager.Instance.listaDePersonagens.Count == 0) return;
+        if (listaDePersonagensLocal == null || listaDePersonagensLocal.Count == 0) return;
 
         indiceAtual++;
-        if (indiceAtual >= TransitionManager.Instance.listaDePersonagens.Count)
+        if (indiceAtual >= listaDePersonagensLocal.Count)
         {
-            indiceAtual = 0; // Volta para o primeiro (Loop infinito)
+            indiceAtual = 0; // Volta para o primeiro (Loop)
         }
         AtualizarGaleria();
     }
@@ -53,31 +58,37 @@ public class GaleriaManager : MonoBehaviour
     // Chamado pelo botão "Voltar" (Anterior)
     public void PersonagemAnterior()
     {
-        if (TransitionManager.Instance == null || TransitionManager.Instance.listaDePersonagens.Count == 0) return;
+        if (listaDePersonagensLocal == null || listaDePersonagensLocal.Count == 0) return;
 
         indiceAtual--;
         if (indiceAtual < 0)
         {
-            indiceAtual = TransitionManager.Instance.listaDePersonagens.Count - 1; // Vai para o último
+            indiceAtual = listaDePersonagensLocal.Count - 1; // Vai para o último
         }
         AtualizarGaleria();
     }
 
     private void AtualizarGaleria()
     {
-        var lista = TransitionManager.Instance.listaDePersonagens;
-        if (lista == null || lista.Count == 0) return;
+        if (listaDePersonagensLocal == null || listaDePersonagensLocal.Count == 0) return;
 
-        PersonagemLore lore = lista[indiceAtual];
+        PersonagemLore lore = listaDePersonagensLocal[indiceAtual];
 
-        // Atualiza a imagem e a descrição usando o mesmo formato do loading
-        imgCartaGaleria.sprite = lore.arteDaCarta;
-        txtDescricaoGaleria.text = $"<b>{lore.nomePersonagem}</b>\n\n{lore.descricao}";
+        // Atualiza a imagem e a descrição
+        if (imgCartaGaleria != null)
+        {
+            imgCartaGaleria.sprite = lore.arteDaCarta;
+        }
 
-        // Atualiza o contador de páginas (ex: 1/12)
+        if (txtDescricaoGaleria != null)
+        {
+            txtDescricaoGaleria.text = $"<b>{lore.nomePersonagem}</b>\n\n{lore.descricao}";
+        }
+
+        // Atualiza o contador (ex: 1/12)
         if (txtContador != null)
         {
-            txtContador.text = $"{indiceAtual + 1} / {lista.Count}";
+            txtContador.text = $"{indiceAtual + 1} / {listaDePersonagensLocal.Count}";
         }
     }
 }

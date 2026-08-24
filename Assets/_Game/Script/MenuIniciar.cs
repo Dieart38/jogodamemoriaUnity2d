@@ -11,8 +11,10 @@ public class MenuIniciar : MonoBehaviour
 {
     [Header("Configurações de Saída")]
     public GameObject painelAgradecimento;
-    public TMP_Text txtAgradecimento; // Arraste o texto do painel aqui
+    
     public float tempoDeEspera = 3.5f;
+
+    public GameObject painelDeConfiguracoes;
 
     void Awake()
     {
@@ -66,5 +68,19 @@ public class MenuIniciar : MonoBehaviour
 #else
             Application.Quit();
 #endif
+    }
+    public void openConfigPanel()
+    {
+        if (painelDeConfiguracoes != null)
+        {
+            painelDeConfiguracoes.SetActive(true);
+        }
+    }
+    public void closeConfigPanel()
+    {
+        if (painelDeConfiguracoes != null)
+        {
+            painelDeConfiguracoes.SetActive(false);
+        }
     }
 }
