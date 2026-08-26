@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class ControllerCursor : MonoBehaviour
 {
     public float velocidade = 500f;
-    public RectTransform cursorVisual; 
-    
+    public RectTransform cursorVisual;
+
     private Vector2 posicaoVirtual;
     private Vector2 ultimaPosicaoMouse;
 
@@ -64,10 +65,19 @@ public class ControllerCursor : MonoBehaviour
         bool botaoSegurado = Input.GetKey(KeyCode.JoystickButton0) || Input.GetKey(KeyCode.Return) || Input.GetMouseButton(0);
         bool botaoSolto = Input.GetKeyUp(KeyCode.JoystickButton0) || Input.GetKeyUp(KeyCode.Return) || Input.GetMouseButtonUp(0);
 
-        // 2. MATA O FOCO NATIVO (Impede o bug de duplo-clique ao apertar Enter/Botão Sul)
-        if (EventSystem.current.currentSelectedGameObject != null)
+        // 2. MATA O FOCO NATIVO (Mas poupa o InputField para permitir digitação!)
+        GameObject objetoSelecionado = EventSystem.current.currentSelectedGameObject;
+        if (objetoSelecionado != null)
         {
-            EventSystem.current.SetSelectedGameObject(null);
+            // Checa se o objeto selecionado é um campo de texto
+            bool ehUmCampoDeTexto = objetoSelecionado.GetComponent<InputField>() != null || objetoSelecionado.GetComponent<TMPro.TMP_InputField>() != null;
+
+            // Se NÃO for um campo de texto, limpa o foco para evitar o bug de duplo-clique.
+            // Se for um campo de texto, não faz nada (deixa o cara digitar).
+            if (!ehUmCampoDeTexto)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+            }
         }
 
         // --- ESTADO 1: O JOGADOR APERTOU O BOTÃO AGORA ---
@@ -86,7 +96,7 @@ public class ControllerCursor : MonoBehaviour
                 // 3. BLINDAGEM DO MOUSE 
                 // Se foi o Mouse, o EventSystem nativo da Unity JÁ clicou sozinho. 
                 // Só injetamos o nosso clique virtual se o jogador usar Teclado/Controle!
-                if (cliqueDeControle) 
+                if (cliqueDeControle)
                 {
                     // Tenta Clicar (Botões normais)
                     GameObject clickTarget = ExecuteEvents.GetEventHandler<IPointerClickHandler>(uiElement);

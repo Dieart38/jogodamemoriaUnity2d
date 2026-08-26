@@ -7,6 +7,9 @@ public class SettingsManager : MonoBehaviour
     // Padrão Singleton para acesso global
     public static SettingsManager Instance { get; private set; }
 
+    [Header("Acessibilidade")]
+    public UnityEngine.UI.Toggle toggleTremor; // Arraste o Toggle da UI aqui
+
     [Header("Referências")]
     public AudioMixer mainMixer;
     
@@ -36,6 +39,15 @@ public class SettingsManager : MonoBehaviour
         float savedMusic = PlayerPrefs.GetFloat("MusicVol", 0.75f);
         float savedSFX = PlayerPrefs.GetFloat("SFXVol", 0.75f);
         float savedCursor = PlayerPrefs.GetFloat("CursorSpeed", 500f);
+        // Carrega o estado salvo do tremor (1 = ligado, 0 = desligado)
+        if (toggleTremor != null)
+        {
+            // Marca a caixinha como checada se o valor for 1
+            toggleTremor.isOn = PlayerPrefs.GetInt("TremerTela", 1) == 1;
+            
+            // Cria um "ouvinte" que avisa o sistema sempre que o jogador clicar na caixinha
+            toggleTremor.onValueChanged.AddListener(DefinirTremor);
+        }
 
         // 2. ATUALIZAR A INTERFACE (Mover os sliders para a posição correta)
         if (musicSlider != null) musicSlider.value = savedMusic;
@@ -93,5 +105,12 @@ public class SettingsManager : MonoBehaviour
         {
             cursor.velocidade = sliderValue;
         }
+    }
+    // Método que é chamado automaticamente quando o jogador clica no Toggle
+    public void DefinirTremor(bool ativado)
+    {
+        // Se ativado for true, salva 1. Se false, salva 0.
+        PlayerPrefs.SetInt("TremerTela", ativado ? 1 : 0);
+        PlayerPrefs.Save(); // Grava no celular/PC imediatamente
     }
 }

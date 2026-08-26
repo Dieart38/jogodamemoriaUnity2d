@@ -61,7 +61,7 @@ public class UIManager : MonoBehaviour
         txtTempo.color = s <= 10 ? Color.red : Color.yellow;
     }
 
-     public void AtualizarVitorias(int valor)
+    public void AtualizarVitorias(int valor)
     {
         txtVitorias.text = $"Vitórias: {valor}";
     }
@@ -76,19 +76,21 @@ public class UIManager : MonoBehaviour
 
     public void MostrarGameOver()
     {
+
         gameoverCont = true;
         gameOverPanel.SetActive(true);
         inputScorePanel.SetActive(true);
-        btnConfirmar.enabled = true; // Habilita o botão para confirmar o nome do recorde
+        btnConfirmar.gameObject.SetActive(true); // Habilita o botão para confirmar o nome do recorde
         GameManager.Instance.musicaGameOver.Play();
     }
+
 
     public void EsconderPaineis()
     {
         vitoriaPanel.SetActive(false);
         gameOverPanel.SetActive(false);
         recordesPanel.SetActive(false);
-       //PainelDePause.SetActive(false);
+        //PainelDePause.SetActive(false);
     }
     // Chamado pelo botao de reiniciar (configurado no inspector)
     public void BotaReiniciar()
@@ -100,7 +102,7 @@ public class UIManager : MonoBehaviour
             AudioManager.Instance.ReiniciarMusica();
         }
 
-        
+
         GameManager.Instance.Reiniciar();
     }
 
@@ -108,8 +110,8 @@ public class UIManager : MonoBehaviour
     {
         recordesPanel.SetActive(false);
         vitoriaPanel.SetActive(false);
-        PainelDePause.SetActive(false);        StartCoroutine(SequenciaDeSaida());
-        
+        PainelDePause.SetActive(false); StartCoroutine(SequenciaDeSaida());
+
 
     }
 
@@ -128,8 +130,9 @@ public class UIManager : MonoBehaviour
         ScoreManager.SalvarRecorde(nome, tempoFinal, tentFinal, fasesFinal);
 
         inputScorePanel.SetActive(false);
-        btnConfirmar.enabled = false;
-        
+        btnConfirmar.gameObject.SetActive(false);
+       
+
         MostrarPainelRecordes();
     }
 
@@ -155,8 +158,8 @@ public class UIManager : MonoBehaviour
         {
             gameOverPanel.SetActive(true);
             GameManager.Instance.musicaGameOver.Play();
-        } 
-        else if(vitoriaPanel==true) vitoriaPanel.SetActive(true);
+        }
+        else if (vitoriaPanel == true) vitoriaPanel.SetActive(true);
     }
     public IEnumerator SequenciaDeSaida()
     {
@@ -176,13 +179,13 @@ public class UIManager : MonoBehaviour
         // 4. conta 1 segundo antes de fechar o jogo
         yield return new WaitForSeconds(0.5f);
         // Encerra a aplicação/jogo
-        
+
         Application.Quit();
         // O Application.Quit() não funciona dentro do Editor da Unity.
         // A linha abaixo serve para testar o fechamento enquanto você joga no Editor:
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
-        #endif
+#endif
 
 #if UNITY_EDITOR
         EditorApplication.isPlaying = false;

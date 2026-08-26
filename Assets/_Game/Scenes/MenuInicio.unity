@@ -1657,13 +1657,13 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 693863138}
   - {fileID: 2085566151}
   - {fileID: 564837962}
   - {fileID: 761152735}
   - {fileID: 1019446916}
   - {fileID: 544031319}
   - {fileID: 927380084}
-  - {fileID: 693863138}
   - {fileID: 116852097}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1704,6 +1704,7 @@ MonoBehaviour:
   painelAgradecimento: {fileID: 761152734}
   tempoDeEspera: 3.5
   painelDeConfiguracoes: {fileID: 9267964}
+  TituloDoJogo: {fileID: 2085566152}
 --- !u!4 &791698875
 Transform:
   m_ObjectHideFlags: 0
@@ -1817,7 +1818,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &927380084
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3794,6 +3795,6 @@ SceneRoots:
   - {fileID: 6254927170737711261}
   - {fileID: 290536918}
   - {fileID: 1628966112}
-  - {fileID: 9068072376491844147}
   - {fileID: 349170402}
   - {fileID: 249151440}
+  - {fileID: 9068072376491844147}

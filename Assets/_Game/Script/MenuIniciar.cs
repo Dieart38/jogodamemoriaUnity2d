@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections; // Necessário para a Coroutine
 using TMPro; // Necessário para o texto do agradecimento
+using UnityEngine.UI; // Necessário para o painel de configurações
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -15,6 +16,7 @@ public class MenuIniciar : MonoBehaviour
     public float tempoDeEspera = 3.5f;
 
     public GameObject painelDeConfiguracoes;
+    public Text TituloDoJogo;
 
     void Awake()
     {
@@ -41,6 +43,13 @@ public class MenuIniciar : MonoBehaviour
     }
     void Update()
     {
+        // o titulo fica pulsando 
+        if (TituloDoJogo != null)
+        {
+            float scale = 1.0f + Mathf.Sin(Time.time * 2.0f) * 0.1f; // Ajuste a velocidade e amplitude conforme necessário
+            TituloDoJogo.transform.localScale = new Vector3(scale, scale, 1);
+        }
+        
         // Detecta o botão 'Voltar' do Android
         if (Input.GetKeyDown(KeyCode.Escape))
         {

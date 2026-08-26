@@ -271,8 +271,13 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            // Erro
+            // Erro tremer a tela e tocar som de erro
+
             SoundManager.Instance.playLose();
+            if (CameraShake.Instance != null)
+            {
+                CameraShake.Instance.Tremer(0.2f, 0.1f); // Duração e magnitude do tremor
+            }
             primeiraCarta.FlipToBack();
             segundaCarta.FlipToBack();
         }
@@ -281,6 +286,8 @@ public class GameManager : MonoBehaviour
         segundaCarta = null;
         aguardandoComparação = false;
     }
+
+
 
     private void Vitoria()
     {
