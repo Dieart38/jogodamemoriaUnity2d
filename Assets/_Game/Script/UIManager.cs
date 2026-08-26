@@ -13,8 +13,13 @@ public class UIManager : MonoBehaviour
     public Text txtTentativas;
     public Text txtPares;
     public Text txtTempo;
-
+    public Text txtVidas;
     public Text txtVitorias;
+
+    [Header("Sistema de Vidas (Modo 3)")]
+    public GameObject containerCoracoes; // O objeto "pai" que segura todos os corações
+    public Image[] arrayCoracoes; // Array que vai guardar as 7 imagens dos corações
+
 
     [Header("Paineis")]
     public GameObject vitoriaPanel;
@@ -131,7 +136,7 @@ public class UIManager : MonoBehaviour
 
         inputScorePanel.SetActive(false);
         btnConfirmar.gameObject.SetActive(false);
-       
+
 
         MostrarPainelRecordes();
     }
@@ -212,4 +217,49 @@ public class UIManager : MonoBehaviour
         }
         Time.timeScale = 0f; // Congela o tempo do jogo
     }
+
+    public void AtualizarVidas(int qtdVidas)
+    {
+        if (arrayCoracoes == null || arrayCoracoes.Length == 0) return;
+
+        for (int i = 0; i < arrayCoracoes.Length; i++)
+        {
+            // Garante que o objeto esteja sempre ligado para não quebrar o layout
+            arrayCoracoes[i].gameObject.SetActive(true);
+
+            if (i < qtdVidas)
+            {
+                // VIDA CHEIA: Cor normal (Branco puro, 100% opaco)
+                arrayCoracoes[i].color = new Color(1f, 1f, 1f, 1f);
+            }
+            else
+            {
+                // VIDA VAZIA: Fica escuro e meio transparente (Efeito de coração vazio)
+                // Os valores são (Red, Green, Blue, Alpha). Tudo 0.2f é um cinza bem escuro, 0.5f é a transparência.
+                arrayCoracoes[i].color = new Color(0.2f, 0.2f, 0.2f, 0.5f);
+            }
+        }
+    }
+    public void ConfigurarHUDPorModo(int modo)
+    {
+        if (modo == 2) // Casual
+        {
+            if (txtTempo != null) txtTempo.gameObject.SetActive(false);
+            if (containerCoracoes != null) containerCoracoes.SetActive(false);
+        }
+        else if (modo == 3) // Sobrevivência
+        {
+            if (txtTempo != null) txtTempo.gameObject.SetActive(false);
+
+            // Liga o container com os corações!
+            if (containerCoracoes != null) containerCoracoes.SetActive(true);
+        }
+        else // Modos 1 e 4 (Tempo)
+        {
+            if (txtTempo != null) txtTempo.gameObject.SetActive(true);
+            if (containerCoracoes != null) containerCoracoes.SetActive(false);
+        }
+    }
+
+
 }

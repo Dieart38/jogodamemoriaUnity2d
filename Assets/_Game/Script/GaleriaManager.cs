@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using UnityEngine.UI; // Mude para UnityEngine.UI se usar Text normal
+//using UnityEngine.UI; // Mude para UnityEngine.UI se usar Text normal
+
 
 public class GaleriaManager : MonoBehaviour
 {

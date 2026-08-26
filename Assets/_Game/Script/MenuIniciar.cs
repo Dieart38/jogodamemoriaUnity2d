@@ -12,7 +12,10 @@ public class MenuIniciar : MonoBehaviour
 {
     [Header("Configurações de Saída")]
     public GameObject painelAgradecimento;
-    
+
+    [Header("Painel de Modos")]
+    public GameObject painelModos;
+
     public float tempoDeEspera = 3.5f;
 
     public GameObject painelDeConfiguracoes;
@@ -25,7 +28,8 @@ public class MenuIniciar : MonoBehaviour
 
         if (painelAgradecimento != null)
         {
-            painelAgradecimento.SetActive(false);
+            // Em vez de carregar a cena direto, abre o painel de modos
+            if (painelModos != null) painelModos.SetActive(true);
         }
     }
 
@@ -49,7 +53,7 @@ public class MenuIniciar : MonoBehaviour
             float scale = 1.0f + Mathf.Sin(Time.time * 2.0f) * 0.1f; // Ajuste a velocidade e amplitude conforme necessário
             TituloDoJogo.transform.localScale = new Vector3(scale, scale, 1);
         }
-        
+
         // Detecta o botão 'Voltar' do Android
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -75,9 +79,20 @@ public class MenuIniciar : MonoBehaviour
 #if UNITY_EDITOR
         EditorApplication.isPlaying = false;
 #else
-            Application.Quit();
+        Application.Quit();
 #endif
     }
+
+    public void SelecionarModoEIniciar(int modoID)
+    {
+        // Salva a escolha do jogador na memória do dispositivo
+        PlayerPrefs.SetInt("ModoDeJogo", modoID);
+        PlayerPrefs.Save();
+        
+        GameManager.vitoria = 0; // Zera a progressão
+        SceneManager.LoadScene("MainGame");
+    }
+    
     public void openConfigPanel()
     {
         if (painelDeConfiguracoes != null)

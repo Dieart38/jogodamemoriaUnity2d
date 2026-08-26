@@ -7,10 +7,18 @@ using UnityEditor; // Necessário para fechar o jogo no Editor
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Modos de Jogo")]
+    public int modoAtual = 1; // 1=Clássico, 2=Casual, 3=Sobrevivência, 4=Time Attack
+    public int vidas = 7;
+    public int maxVidas = 7;
+    
+
     [Header("Rastreio de Objetos")]
     private List<Card> cartasEmJogo = new List<Card>();
     public static GameManager Instance { get; private set; }
+
     [Header("Configuracao do Grid")]
+    public Transform pontoDeOrigemGrid;
     public int colunas;
     public int linhas;
     public float espacoHorizontal = 1.2f; // Novo 
@@ -56,8 +64,14 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        // Lê o modo que o jogador escolheu. Se houver erro, joga no modo 1.
+        modoAtual = PlayerPrefs.GetInt("ModoDeJogo", 1);
+
+        if (modoAtual == 3) vidas = maxVidas;
+
         tempoRestante = 60f; // Garante que o tempo comece do valor correto
         vitoria = 0; // Garante que a vitória comece do zero
+        UIManager.Instance.ConfigurarHUDPorModo(modoAtual);
         ConfigurarDificuldade();
         IniciarJogo();
 
@@ -68,22 +82,24 @@ public class GameManager : MonoBehaviour
     {
         if (!jogoAtivo) return;
 
-        tempoRestante -= Time.deltaTime;
-        UIManager.Instance.AtualizarTempo(tempoRestante);
-
-        if (tempoRestante <= 10f && !musicaAcelerada)
+        // O tempo SÓ DIMINUI se for o Modo 1 (Clássico) ou Modo 4 (Time Attack)
+        if (modoAtual == 1 || modoAtual == 4)
         {
-            musicaAcelerada = true;
-            AudioManager.Instance.DefinirVelocidadeMusica(1.25f); // 25% mais rápido
-        }
+            tempoRestante -= Time.deltaTime;
+            UIManager.Instance.AtualizarTempo(tempoRestante);
 
-        if (tempoRestante <= 0f)
-        {
-            tempoRestante = 0f;
+            if (tempoRestante <= 10f && !musicaAcelerada)
+            {
+                musicaAcelerada = true;
+                if (AudioManager.Instance != null) AudioManager.Instance.DefinirVelocidadeMusica(1.25f);
+            }
 
-            AudioManager.Instance.PararMusica(); // Para a música imediatamente
-
-            GameOver();
+            if (tempoRestante <= 0f)
+            {
+                tempoRestante = 0f;
+                if (AudioManager.Instance != null) AudioManager.Instance.PararMusica();
+                GameOver();
+            }
         }
     }
 
@@ -152,6 +168,11 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.AtualizarPares(paresEncontrados, totalPares);
         UIManager.Instance.AtualizarVitorias(vitoria);
 
+        if (modoAtual == 3)
+        {
+            UIManager.Instance.AtualizarVidas(vidas);
+        }
+
         CriarGrid();
 
         // 2. A MUDANÇA ESTÁ AQUI: Iniciamos a memorização no final
@@ -177,10 +198,15 @@ public class GameManager : MonoBehaviour
         }
         Embaralhar(ids);
 
+        // 1. Pega a posição do nosso guia
+        Vector3 centroBase = pontoDeOrigemGrid != null ? pontoDeOrigemGrid.position : Vector3.zero;
+
         float larguraTotal = (colunas - 1) * espacoHorizontal;
         float alturaTotal = (linhas - 1) * espacoVertical;
-        float startX = -larguraTotal / 2f;
-        float startY = alturaTotal / 2f;
+        
+        // 2. A CORREÇÃO ESTÁ AQUI: Agora usamos o centroBase.x e centroBase.y!
+        float startX = centroBase.x - (larguraTotal / 2f);
+        float startY = centroBase.y + (alturaTotal / 2f);
 
         int index = 0;
         for (int l = 0; l < linhas; l++)
@@ -202,7 +228,6 @@ public class GameManager : MonoBehaviour
 
                 obj.name = $"Card_{ids[index]}_{index}";
 
-                // NOVO: Adicionamos a carta na lista oficial de rastreio!
                 cartasEmJogo.Add(card);
 
                 index++;
@@ -252,6 +277,11 @@ public class GameManager : MonoBehaviour
 
             // Par encontrado
             SoundManager.Instance.playMatch();
+            if (modoAtual == 4)
+            {
+                tempoRestante += 3f; // Modo 4: Ganha 3 segundos extras no acerto!
+                UIManager.Instance.AtualizarTempo(tempoRestante);
+            }
 
             // INSTANCIAR EXPLOSÃO EM CADA CARTA
             Instantiate(matchEffectPrefab, primeiraCarta.transform.position, Quaternion.identity);
@@ -274,6 +304,15 @@ public class GameManager : MonoBehaviour
             // Erro tremer a tela e tocar som de erro
 
             SoundManager.Instance.playLose();
+            if (modoAtual == 3)
+            {
+                vidas--; // Modo 3: Perde vida no erro!
+                UIManager.Instance.AtualizarVidas(vidas);
+                if (vidas <= 0)
+                {
+                    GameOver();
+                }
+            }
             if (CameraShake.Instance != null)
             {
                 CameraShake.Instance.Tremer(0.2f, 0.1f); // Duração e magnitude do tremor
@@ -303,6 +342,12 @@ public class GameManager : MonoBehaviour
 
         // 3. POR FIM: Mostra a UI
         SoundManager.Instance.playWin();
+        if (modoAtual == 3)
+    {
+        vidas += 2; // Recupera 2 vidas ao passar de fase
+        if (vidas > maxVidas) vidas = maxVidas; // Limita ao máximo de 7
+        UIManager.Instance.AtualizarVidas(vidas);
+    }
         UIManager.Instance.MostrarVitoria(tentativas);
 
 
@@ -327,6 +372,7 @@ public class GameManager : MonoBehaviour
         vitoria = 0;
         tempoTotalSessao = 0;
         tentativasTotaisSessao = 0;
+        vidas = maxVidas;
 
         if (AudioManager.Instance != null) AudioManager.Instance.DefinirVelocidadeMusica(1.0f);
         UIManager.Instance.EsconderPaineis();
