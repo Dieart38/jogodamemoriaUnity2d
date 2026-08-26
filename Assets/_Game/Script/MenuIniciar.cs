@@ -32,19 +32,18 @@ public class MenuIniciar : MonoBehaviour
             if (painelModos != null) painelModos.SetActive(true);
         }
     }
+    void Start()
+    {
+        if (painelModos != null)
+        {
+            painelModos.SetActive(false); // Garante que começa invisível!
+        }
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.TocarMusicaDoMenu();
+        }
+    }
 
-    public void Jogar()
-    {
-        // Opcional: Você também pode zerar aqui para garantir que 
-        // toda vez que o botão "Jogar" for clicado, comece do nível 0
-        GameManager.vitoria = 0;
-        SceneManager.LoadScene("MainGame");
-    }
-    public void SairDoJogo()
-    {
-        // Iniciamos a sequência de despedida em vez de fechar direto
-        StartCoroutine(SequenciaDeSaida());
-    }
     void Update()
     {
         // o titulo fica pulsando 
@@ -82,17 +81,32 @@ public class MenuIniciar : MonoBehaviour
         Application.Quit();
 #endif
     }
+    public void Jogar()
+    {
+        // Opcional: Você também pode zerar aqui para garantir que 
+        // toda vez que o botão "Jogar" for clicado, comece do nível 0
+        if (painelModos != null)
+        {
+            painelModos.SetActive(true);
+        }
+    }
+    public void SairDoJogo()
+    {
+        // Iniciamos a sequência de despedida em vez de fechar direto
+        StartCoroutine(SequenciaDeSaida());
+    }
+
 
     public void SelecionarModoEIniciar(int modoID)
     {
-        // Salva a escolha do jogador na memória do dispositivo
+        // Salva a escolha do jogador na memória do dispositivo 
         PlayerPrefs.SetInt("ModoDeJogo", modoID);
         PlayerPrefs.Save();
-        
+
         GameManager.vitoria = 0; // Zera a progressão
         SceneManager.LoadScene("MainGame");
     }
-    
+
     public void openConfigPanel()
     {
         if (painelDeConfiguracoes != null)

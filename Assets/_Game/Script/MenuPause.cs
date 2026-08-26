@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections; // Necessário para usar Coroutines (IEnumerator)
+using UnityEngine.SceneManagement; // Necessário para carregar cenas
 
 public class MenuPause : MonoBehaviour
 {
@@ -27,7 +28,10 @@ public class MenuPause : MonoBehaviour
         {
             painelDeConfiguracoes.SetActive(false);
         }
+        
+        // BLINDAGEM: Garante que a fase começa 100% descongelada e com som!
         Time.timeScale = 1f;
+        AudioListener.pause = false; 
     }
 
     void Update()
@@ -38,7 +42,6 @@ public class MenuPause : MonoBehaviour
             Input.GetKeyDown(KeyCode.JoystickButton7))
         {
             AlternarPause();
-
         }
     }
 
@@ -66,7 +69,9 @@ public class MenuPause : MonoBehaviour
         // Quando pausar, garante que sempre mostre os botões primeiro e esconda as opções
         if (menuPrincipalPause != null) menuPrincipalPause.SetActive(true);
         if (painelDeConfiguracoes != null) painelDeConfiguracoes.SetActive(false);
+        
         Time.timeScale = 0f; // Congela o tempo do jogo
+        AudioListener.pause = true; // PAUSA TODOS OS SONS!
     }
 
     public void Continuar()
@@ -76,10 +81,10 @@ public class MenuPause : MonoBehaviour
         {
             painelDePause.SetActive(false);
         }
+        
         Time.timeScale = 1f; // Retoma o tempo normal do jogo
+        AudioListener.pause = false; // RETOMA OS SONS DE ONDE PARARAM!
     }
-
-
 
     public void openConfigPanel()
     {
@@ -88,9 +93,8 @@ public class MenuPause : MonoBehaviour
             menuPrincipalPause.SetActive(false); // Esconde o menu principal do pause
             painelDeConfiguracoes.SetActive(true);
         }
-
-
     }
+    
     public void closeConfigPanel()
     {
         if (painelDeConfiguracoes != null)
@@ -102,11 +106,25 @@ public class MenuPause : MonoBehaviour
 
     public void FecharMenuPause()
     {
-        painelDePause.SetActive(false);
-        Time.timeScale = 1f; // Retoma o tempo normal do jogo
+        Continuar(); // Centralizado: chama a mesma função de Continuar para não duplicar código
     }
 
-    // --- NOVA PARTE: Sair do Jogo ---
+    // voltar ao menu iniciar
+    public void VoltarAoMenuIniciar()
+    {
+        // Desativa o menu de pause para não ficar sobreposto
+        if (painelDePause != null)
+        {
+            painelDePause.SetActive(false);
+        }
+
+        // BLINDAGEM: Se o jogador voltar ao menu, destrave o tempo e o áudio antes de mudar de cena!
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
+
+        // volta para o menu iniciar
+        SceneManager.LoadScene("MenuIniciar");
+    }
 
     public void SairDoJogo()
     {
@@ -138,14 +156,13 @@ public class MenuPause : MonoBehaviour
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
     }
+    
     public void ReiniciarDoPause()
     {
-        // 1. Primeiro, nós saímos do estado de pause formalmente
-        Continuar(); // Isso vai fazer o Time.timeScale = 1f e esconder o painel de pause
+        // 1. Primeiro, nós saímos do estado de pause formalmente (o Continuar já despausa o áudio)
+        Continuar(); 
         
         // 2. Agora sim, mandamos o jogo reiniciar
         UIManager.Instance.BotaReiniciar(); 
     }
-
-
 }

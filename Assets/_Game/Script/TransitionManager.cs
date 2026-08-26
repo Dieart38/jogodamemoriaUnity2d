@@ -69,41 +69,60 @@ public class TransitionManager : MonoBehaviour
 
     private IEnumerator RotinaDeLoading(System.Action acaoPosLoading)
     {
-        // 1. LÓGICA DO SHUFFLE BAG (Aleatório sem repetição)
-        if (sacolaDeIndices.Count == 0)
+        // 1. BLINDAGEM DE TRANSIÇÃO: Liga o painel se ele existir
+        if (painelTransicao != null) 
         {
-            ResetarSacola(); // Se a sacola esvaziou, enche de novo!
+            painelTransicao.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("Painel de transição não está linkado no Inspector!");
         }
 
-        // Puxa um "papelzinho" aleatório da sacola
-        int indexSorteado = Random.Range(0, sacolaDeIndices.Count);
-        int idDoPersonagem = sacolaDeIndices[indexSorteado];
+        // 2. LÓGICA DO SHUFFLE BAG E TEXTOS (Protegido contra lista vazia)
+        if (listaDePersonagens != null && listaDePersonagens.Count > 0)
+        {
+            if (sacolaDeIndices.Count == 0)
+            {
+                ResetarSacola(); 
+            }
 
-        // Joga o "papelzinho" fora para não repetir
-        sacolaDeIndices.RemoveAt(indexSorteado);
+            int indexSorteado = Random.Range(0, sacolaDeIndices.Count);
+            int idDoPersonagem = sacolaDeIndices[indexSorteado];
+            sacolaDeIndices.RemoveAt(indexSorteado); 
 
-        // 2. ATUALIZA A INTERFACE GRÁFICA
-        PersonagemLore loreSorteada = listaDePersonagens[idDoPersonagem];
-        imgCartaExpandida.sprite = loreSorteada.arteDaCarta;
-        txtDescricao.text = $"<b>{loreSorteada.nomePersonagem}</b>\n\n{loreSorteada.descricao}";
-        barraCarregamento.value = 0f;
+            PersonagemLore loreSorteada = listaDePersonagens[idDoPersonagem];
 
-        painelTransicao.SetActive(true);
+            if (imgCartaExpandida != null && loreSorteada != null) 
+                imgCartaExpandida.sprite = loreSorteada.arteDaCarta;
+                
+            if (txtDescricao != null && loreSorteada != null) 
+                txtDescricao.text = $"<b>{loreSorteada.nomePersonagem}</b>\n\n{loreSorteada.descricao}";
+        }
 
         // 3. ANIMAÇÃO DA BARRA DE PROGRESSO
+        if (barraCarregamento != null) 
+            barraCarregamento.value = 0f;
+
         float tempoGasto = 0f;
         while (tempoGasto < tempoDeCarregamento)
         {
+            // Usamos unscaledDeltaTime para a barra carregar mesmo se o jogo estiver pausado (Time.timeScale = 0)
             tempoGasto += Time.unscaledDeltaTime;
-            // Interpola o valor do slider de 0 a 1 suavemente
-            barraCarregamento.value = tempoGasto / tempoDeCarregamento;
-            yield return null; // Espera o próximo frame
+            
+            if (barraCarregamento != null)
+            {
+                barraCarregamento.value = tempoGasto / tempoDeCarregamento; 
+            }
+            
+            yield return null; 
         }
 
         // 4. FINALIZAÇÃO
-        painelTransicao.SetActive(false);
-
-        // Chama o comando que o GameManager enviou (ex: ConfigurarDificuldade)
-        acaoPosLoading?.Invoke();
+        if (painelTransicao != null) 
+            painelTransicao.SetActive(false);
+        
+        // Executa a ação para gerar a próxima fase!
+        acaoPosLoading?.Invoke(); 
     }
 }

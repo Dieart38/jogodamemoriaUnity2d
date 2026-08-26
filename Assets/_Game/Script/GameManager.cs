@@ -11,7 +11,8 @@ public class GameManager : MonoBehaviour
     public int modoAtual = 1; // 1=Clássico, 2=Casual, 3=Sobrevivência, 4=Time Attack
     public int vidas = 7;
     public int maxVidas = 7;
-    
+    public int vitorias = 0; // Contador de vitórias para o modo 3 (Sobrevivência)
+
 
     [Header("Rastreio de Objetos")]
     private List<Card> cartasEmJogo = new List<Card>();
@@ -64,19 +65,19 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // Lê o modo que o jogador escolheu. Se houver erro, joga no modo 1.
+        // Lê o modo que o jogador escolheu
         modoAtual = PlayerPrefs.GetInt("ModoDeJogo", 1);
 
         if (modoAtual == 3) vidas = maxVidas;
 
-        tempoRestante = 60f; // Garante que o tempo comece do valor correto
-        vitoria = 0; // Garante que a vitória comece do zero
+        // NOVO: Pede para o UIManager ligar e desligar as coisas certas na tela!
         UIManager.Instance.ConfigurarHUDPorModo(modoAtual);
+
+        tempoRestante = 60f;
+        vitoria = 0;
         ConfigurarDificuldade();
         IniciarJogo();
-
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -105,43 +106,41 @@ public class GameManager : MonoBehaviour
 
     private void ConfigurarDificuldade()
     {
-        linhas = 4; // Defina o padrão aqui fora para garantir que nunca seja 0 ou lixo
-        //tempoRestante = 60f; // Define o tempo padrão aqui fora para garantir que nunca seja 0 
+        linhas = 4; // Padrão garantido
+
         if (vitoria <= 3)
         {
+            // Fases Iniciais (Curva de aprendizado fixa)
             switch (vitoria)
             {
-                case 0: colunas = 3; tempoRestante = 60f; break; // 3x4 = 12 cartas
-                case 1: colunas = 4; tempoRestante = 60f; break; // 4x4 = 16 cartas
-                case 2: colunas = 5; tempoRestante = 60f; break; // 5x4 = 20 cartas
-                case 3: colunas = 6; tempoRestante = 80f; break; // 6x4 = 24 cartas
+                case 0: colunas = 3; tempoRestante = 60f; break; // 12 cartas
+                case 1: colunas = 4; tempoRestante = 60f; break; // 16 cartas
+                case 2: colunas = 5; tempoRestante = 60f; break; // 20 cartas
+                case 3: colunas = 6; tempoRestante = 80f; break; // 24 cartas
             }
-            Debug.Log("Dificuldade configurada: " + colunas + "x" + linhas + " com " + tempoRestante + " segundos." + "Vitoria: " + vitoria);
         }
-        else if (vitoria > 3)
+        else
         {
+            // Fases Avançadas (Dificuldade Infinita a partir da vitória 4)
+
+            // Sorteia a quantidade de colunas entre 3 e 6 (resultado sempre par com as 4 linhas)
             colunas = Random.Range(3, 7);
-            switch (vitoria)
-            {
-                case 4: colunas = 3; tempoRestante = 30f; break; // 3x4 = 12 cartas
-                case 5: colunas = 4; tempoRestante = 35f; break; // 4x4 = 16 cartas
-                case 6: colunas = 5; tempoRestante = 40f; break; // 5x4 = 20 cartas
-                case 7: colunas = 6; tempoRestante = 50f; break; // 6x4 = 24 cartas
-            }
-            Debug.Log("Dificuldade configurada 2: " + colunas + "x" + linhas + " com " + tempoRestante + " segundos." + "Vitoria: " + vitoria);
+
+            // CÁLCULO DINÂMICO DE TEMPO: 
+            // Começa com 50 segundos na vitória 4, e vai caindo 2 segundos a cada vitória nova.
+            // O Mathf.Max garante que o tempo NUNCA fique menor que 20 segundos (para não ficar impossível).
+            float tempoCalculado = 50f - ((vitoria - 4) * 2f);
+            tempoRestante = Mathf.Max(20f, tempoCalculado);
         }
 
-        // Lógica do Tempo (O cálculo que você queria)
-        // if (vitoria > 3 && colunas == 5)
-        // {
-        //     float tempoCalculado = 50f - ((vitoria - 3) * 5f);
-        //     tempoRestante = Mathf.Max(tempoCalculado, 25f);
-        // }
+        // Guarda o tempo inicial para os cálculos de pontuação no final da fase
+        tempoFaseInicial = tempoRestante;
 
-        tempoFaseInicial = tempoRestante; // Guarda o tempo inicial para cálculo posterior
+        // Calcula o total de pares
         totalPares = (colunas * linhas) / 2;
-    }
 
+        Debug.Log($"Dificuldade configurada: {colunas}x{linhas} com {tempoRestante}s | Vitória atual: {vitoria}");
+    }
     public void IniciarJogo()
     {
         LimparGrid();
@@ -171,6 +170,7 @@ public class GameManager : MonoBehaviour
         if (modoAtual == 3)
         {
             UIManager.Instance.AtualizarVidas(vidas);
+
         }
 
         CriarGrid();
@@ -203,7 +203,7 @@ public class GameManager : MonoBehaviour
 
         float larguraTotal = (colunas - 1) * espacoHorizontal;
         float alturaTotal = (linhas - 1) * espacoVertical;
-        
+
         // 2. A CORREÇÃO ESTÁ AQUI: Agora usamos o centroBase.x e centroBase.y!
         float startX = centroBase.x - (larguraTotal / 2f);
         float startY = centroBase.y + (alturaTotal / 2f);
@@ -343,11 +343,11 @@ public class GameManager : MonoBehaviour
         // 3. POR FIM: Mostra a UI
         SoundManager.Instance.playWin();
         if (modoAtual == 3)
-    {
-        vidas += 2; // Recupera 2 vidas ao passar de fase
-        if (vidas > maxVidas) vidas = maxVidas; // Limita ao máximo de 7
-        UIManager.Instance.AtualizarVidas(vidas);
-    }
+        {
+            vidas += 2; // Recupera 2 vidas ao passar de fase
+            if (vidas > maxVidas) vidas = maxVidas; // Limita ao máximo de 7
+            UIManager.Instance.AtualizarVidas(vidas);
+        }
         UIManager.Instance.MostrarVitoria(tentativas);
 
 
@@ -395,15 +395,19 @@ public class GameManager : MonoBehaviour
     public void ProximoNivel()
     {
         UIManager.Instance.EsconderPaineis();
-        if (AudioManager.Instance != null) AudioManager.Instance.DefinirVelocidadeMusica(1.0f);
 
-        // Dispara a transição e passa a função ConfigurarEIniciar como parâmetro
+        // Garante que a velocidade da música volte ao normal (caso estivesse acelerada)
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.DefinirVelocidadeMusica(1.0f);
+
+        // Chama a transição com a tela de loading para TODOS os modos
         if (TransitionManager.Instance != null)
         {
             TransitionManager.Instance.IniciarTransicao(ConfigurarEIniciar);
         }
         else
         {
+            // Fallback de segurança se o TransitionManager não for encontrado
             ConfigurarEIniciar();
         }
     }

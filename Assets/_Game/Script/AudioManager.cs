@@ -37,18 +37,18 @@ public class AudioManager : MonoBehaviour
     }
 
     // Método específico para o Menu Iniciar
-    public void TocarMusicaDoMenu()
-    {
-        if (musicaDoMenu == null) return;
+    // public void TocarMusicaDoMenu()
+    // {
+    //     if (musicaDoMenu == null) return;
 
-        // Só troca a música se ela já não estiver tocando (evita reiniciar do zero sem querer)
-        if (musicSource.clip == musicaDoMenu && musicSource.isPlaying) return;
+    //     // Só troca a música se ela já não estiver tocando (evita reiniciar do zero sem querer)
+    //     if (musicSource.clip == musicaDoMenu && musicSource.isPlaying) return;
 
-        musicSource.clip = musicaDoMenu;
-        musicSource.loop = true;
-        musicSource.pitch = 1f; // Reseta a velocidade caso tenha mudado na gameplay
-        musicSource.Play();
-    }
+    //     musicSource.clip = musicaDoMenu;
+    //     musicSource.loop = true;
+    //     musicSource.pitch = 1f; // Reseta a velocidade caso tenha mudado na gameplay
+    //     musicSource.Play();
+    // }
 
     // Método para as fases (escolhe uma aleatória da lista)
     public void TocarMusicaAleatoria()
@@ -82,6 +82,20 @@ public class AudioManager : MonoBehaviour
         if (musicSource != null)
         {
             musicSource.Stop();
+        }
+    }
+
+    public void TocarMusicaDoMenu()
+    {
+        // Nota: Troque "audioSource" pelo nome da sua variável de AudioSource de música, se for diferente (ex: bgmSource, musicaSource)
+        if (musicaDoMenu != null)
+        {
+            // Só troca a música se não estiver tocando ela já
+            if (musicSource.clip != musicaDoMenu) 
+            {
+                musicSource.clip = musicaDoMenu;
+                musicSource.Play();
+            }
         }
     }
 }

@@ -20,6 +20,9 @@ public class UIManager : MonoBehaviour
     public GameObject containerCoracoes; // O objeto "pai" que segura todos os corações
     public Image[] arrayCoracoes; // Array que vai guardar as 7 imagens dos corações
 
+    [Header("Elementos de Modos")]
+    // Variável para agrupar tudo de vida (O texto "Vidas" e os corações)
+    public GameObject containerHUDVidas;
 
     [Header("Paineis")]
     public GameObject vitoriaPanel;
@@ -201,13 +204,17 @@ public class UIManager : MonoBehaviour
 
     public void ProximoNivel()
     {
-        //parar musica atual
+        // Parar/Reiniciar áudio se necessário
         if (AudioManager.Instance != null)
         {
             AudioManager.Instance.ReiniciarMusica();
         }
-        //chamar proximo nivel
-        GameManager.Instance.ProximoNivel();
+
+        // Chama o próximo nível através do GameManager (que vai rodar o TransitionManager)
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.ProximoNivel();
+        }
     }
     public void PausarJogo()
     {
@@ -240,24 +247,46 @@ public class UIManager : MonoBehaviour
             }
         }
     }
+    // public void ConfigurarHUDPorModo(int modo)
+    // {
+    //     if (modo == 2) // Casual
+    //     {
+    //         if (txtTempo != null) txtTempo.gameObject.SetActive(false);
+    //         if (containerCoracoes != null) containerCoracoes.SetActive(false);
+    //     }
+    //     else if (modo == 3) // Sobrevivência
+    //     {
+    //         if (txtTempo != null) txtTempo.gameObject.SetActive(false);
+
+    //         // Liga o container com os corações!
+    //         if (containerCoracoes != null) containerCoracoes.SetActive(true);
+    //     }
+    //     else // Modos 1 e 4 (Tempo)
+    //     {
+    //         if (txtTempo != null) txtTempo.gameObject.SetActive(true);
+    //         if (containerCoracoes != null) containerCoracoes.SetActive(false);
+    //     }
+    // }
+
     public void ConfigurarHUDPorModo(int modo)
     {
-        if (modo == 2) // Casual
-        {
-            if (txtTempo != null) txtTempo.gameObject.SetActive(false);
-            if (containerCoracoes != null) containerCoracoes.SetActive(false);
-        }
-        else if (modo == 3) // Sobrevivência
-        {
-            if (txtTempo != null) txtTempo.gameObject.SetActive(false);
+        // Regras lógicas:
+        // Modo 1 e 4 usam Tempo. Modos 2 e 3 NÃO usam tempo.
+        bool usaTempo = (modo == 1 || modo == 4);
+        
+        // Apenas o Modo 3 usa Vidas.
+        bool usaVidas = (modo == 3);
 
-            // Liga o container com os corações!
-            if (containerCoracoes != null) containerCoracoes.SetActive(true);
-        }
-        else // Modos 1 e 4 (Tempo)
+        // Liga ou desliga o texto de Tempo
+        if (txtTempo != null)
         {
-            if (txtTempo != null) txtTempo.gameObject.SetActive(true);
-            if (containerCoracoes != null) containerCoracoes.SetActive(false);
+            txtTempo.gameObject.SetActive(usaTempo);
+        }
+
+        // Liga ou desliga as Vidas inteiras (Texto + Corações)
+        if (containerHUDVidas != null)
+        {
+            containerHUDVidas.SetActive(usaVidas);
         }
     }
 
