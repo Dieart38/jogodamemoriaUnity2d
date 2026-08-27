@@ -16,6 +16,8 @@ public class ControllerCursor : MonoBehaviour
 
     void Awake()
     {
+        // manter tamanho do cursor visual consistente com a resolução da tela
+        cursorVisual.localScale = Vector3.one * Screen.width / 1920f; // Ajuste baseado na resolução de referência
         if (cursorVisual == null) Debug.LogError("ControllerCursor: O cursorVisual não foi atribuído.");
     }
 
